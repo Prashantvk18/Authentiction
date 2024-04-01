@@ -71,6 +71,15 @@
    // Your Firebase configuration
    const firebaseConfig = {
     //Here you have to insert your firbase config
+    
+  apiKey: "AIzaSyD0VTTXerQfhPdmNnrObQaO0tk6BhUNH4w",
+  authDomain: "otpverification-796e2.firebaseapp.com",
+  databaseURL: "https://otpverification-796e2-default-rtdb.firebaseio.com",
+  projectId: "otpverification-796e2",
+  storageBucket: "otpverification-796e2.appspot.com",
+  messagingSenderId: "474050765523",
+  appId: "1:474050765523:web:a9ce987cbeb36125202a26",
+  measurementId: "G-98DT0551V9"
 };
    
    // Initialize Firebase
