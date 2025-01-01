@@ -15,7 +15,7 @@ class Checkedloggedin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (!\Auth::check()) {
+        if (!\Auth::check() ) {
             // User is not logged in, redirect to login page
             return redirect('/');
         }

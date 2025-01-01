@@ -3,7 +3,7 @@
      <div class="container ">
         <div class="row justify-content-center mt-20">
             <div class="col-sm-4"> 
-                <div class="card mt-5 p-3">
+                <div class="card mt-5 p-3" >
                     <h3>USER REGISTER</h3>
                     @if (Session::has('error'))
                         <p class="text-danger">{{ Session::get('error') }}</p>
@@ -34,7 +34,7 @@
                             <span id="error-confirmed_password" class="text-danger"></span>
                         </div>
                         <br>
-                        <div id="recaptcha_container"></div>
+                        <!---<div id="recaptcha_container"></div>
                         <br>
                         <div>
                             <span id="error_otp" style="color:red;display:none">
@@ -45,7 +45,7 @@
                             <input type="text" id="otp" name="otp" class="form-control">
                             <span id="error-otp" class="text-danger"></span>
                             
-                        </div>
+                        </div>--->
                         <br>
                        
 
@@ -134,7 +134,43 @@ $(document).ready(function() {
                 event.preventDefault();
             var code =$("#otp").val();
             var success = 0;
-            if(code.length){
+            var formData = $('#taskForm').serialize();
+            $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        type:'post',
+                        url:"{{ url('register') }}",
+                        data:formData,
+                        success: function(response) {
+                            console.log(response.message);
+                            $("#taskForm").css('display', 'none');
+                            document.getElementById("success_msg").innerHTML = response.message;
+                            //$("#image").attr('src' , 'image/welcome.png');
+                            setTimeout(function() {
+                                // Code to execute after the "pause"
+                                window.location.href = response.redirect;
+                            }, 3000);
+                           
+                   
+                            // Handle success (e.g., update UI, display message)
+                        },
+                        error: function(error) {
+                        console.log(error);
+                            Object.keys(error.responseJSON.errors).forEach(field => {
+                                console.log(field);
+                                const errorMessage = error.responseJSON.errors[field][0];
+                                console.log(errorMessage);
+                                document.getElementById('error-' + field).innerHTML = errorMessage;
+                        });
+                            
+                        // alert(error.message);
+                            //alert(error->message);
+                        // Handle error (e.g., display error message)
+                        }
+                    });
+
+            /*if(code.length){
                 if (typeof  confirmationResult == 'undefined'){
                     $('#error_otp').html('The OTP has not been generated');
                     $("#error_otp").show();
@@ -163,28 +199,28 @@ $(document).ready(function() {
                             }, 3000);
                            
                    
-                    // Handle success (e.g., update UI, display message)
-                    },
-                    error: function(error) {
-                       console.log(error);
-                        Object.keys(error.responseJSON.errors).forEach(field => {
-                            console.log(field);
-                            const errorMessage = error.responseJSON.errors[field][0];
-                            console.log(errorMessage);
-                            document.getElementById('error-' + field).innerHTML = errorMessage;
+                            // Handle success (e.g., update UI, display message)
+                        },
+                        error: function(error) {
+                        console.log(error);
+                            Object.keys(error.responseJSON.errors).forEach(field => {
+                                console.log(field);
+                                const errorMessage = error.responseJSON.errors[field][0];
+                                console.log(errorMessage);
+                                document.getElementById('error-' + field).innerHTML = errorMessage;
+                        });
+                            
+                        // alert(error.message);
+                            //alert(error->message);
+                        // Handle error (e.g., display error message)
+                        }
                     });
-                        
-                       // alert(error.message);
-                        //alert(error->message);
-                    // Handle error (e.g., display error message)
-                    }
-                });
 
             }).catch(function(error){
                 $('#error_otp').text(error.message);
 				$("#error_otp").show();
             });
-            }
+            }*/
            
 
             });

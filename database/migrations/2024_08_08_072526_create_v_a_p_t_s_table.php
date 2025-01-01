@@ -13,15 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('v_a_p_t_s', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('mobile_no')->unique();
-            //$table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->boolean('is_active')->default(0);
-            $table->boolean('is_admin')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->string('ticket_no')->unique();
+            $table->string('Client_name')->nullable();
+            $table->string('updatation_data')->nullable();
+            $table->date('start_date');
+            $table->date('End_date');
+            $table->string('user_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('v_a_p_t_s');
     }
 };

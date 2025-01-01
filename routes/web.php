@@ -4,16 +4,26 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Middleware\Checkedloggedin;
 
-Route::controller(AuthenticationController::class)->group(function(){
-    Route::get('/','login')->name('login');
-    Route::get('/register','register')->name('register');
-    Route::post('/register','save_register')->name('save_register');
-    Route::post('/','login_user')->name('login_user');
+//For sign in and signup page
+Route::group(['middleware' => 'guest'],function() {
+    Route::controller(AuthenticationController::class)->group(function(){
+        require __DIR__ . '/web_routes/auth_routes.php'; 
+    });
+});
+//After sign in
+Route::group(['middleware' => 'checkedloggedin'],function() {
+    require __DIR__ . '/web_routes/user_router.php';
+    require __DIR__ . '/web_routes/ticket_router.php';
+    require __DIR__ . '/web_routes/createcsv_router.php';
+    require __DIR__ . '/web_routes/vapt_routes.php';
+    require __DIR__ . '/web_routes/bloodcamp_routes.php';
+    require __DIR__ . '/web_routes/expanse_routes.php';
+    require __DIR__ . '/web_routes/export_pdf.php';
+    Route::get('/logout',[AuthenticationController::class,'logout'])->name('logout');
+    
 });
 
 
 Route::get('/welcome' , function(){
     return view('welcome');
 })->middleware(['checkedloggedin']);
-
-Route::get('/logout',[AuthenticationController::class,'logout'])->name('logout');
