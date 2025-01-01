@@ -45,7 +45,7 @@
                         <tr>
                             <td>{{$trip_data->firstItem() + $srno }}</td>
                             <td>{{$data->trip_name}}</td>
-                            <td>0.00</td>
+                            <td>{{$data->final_expanse}}</td>
                             <td>{{$data->start_date}}</td>
                             <td>{{$data->End_date}}</td>
                             <td>

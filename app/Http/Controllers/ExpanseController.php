@@ -166,6 +166,7 @@ class ExpanseController extends Controller
         
         $expanse_data = ExpanseData::where('trip_id',$request->trip_id)->get();
         $user_data = UserData::where('trip_id' , $request->trip_id)->get();
+        $final_expanses = 0;
         $user_array=[];
         foreach ($user_data as $data1) {
             $user_array[$data1->id] = 0;
@@ -183,8 +184,14 @@ class ExpanseController extends Controller
                     $user_array[$id] = $value + $contro_distrtibute;
                 }
             }
-           
+            $final_expanses = $final_expanses +  $data->expanse_amount;
         }
+          
+            $trip_final_data = TripData::where('id',$request->trip_id)->first();
+            
+            $trip_final_data->final_expanse = $final_expanses ;
+          
+            $trip_final_data->save();
         //print_r($user_array);die;
             //$user_data = UserData::where('trip_id' , $request->trip_id)->whereNotIn('id',$exclude_arr )->get();
             //$per_user_contro = $data->expanse_amount / count($user_data);
