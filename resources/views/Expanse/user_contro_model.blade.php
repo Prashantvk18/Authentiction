@@ -100,7 +100,7 @@
     </div>
 <script>
         function delete_formdata(id=0,uid=0,trip_id=0) {
-            console.log("HII");
+            //console.log("HII");
             event.preventDefault();
             $.ajax({
                 headers: {
@@ -116,7 +116,7 @@
                 },
 
                 success: function (response) {
-                  //  location.reload();
+                    location.reload();
                 },
                 error : function (response) {
                 }

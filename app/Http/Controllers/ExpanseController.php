@@ -274,6 +274,7 @@ class ExpanseController extends Controller
             $is_admin = 1;
         }
         $user_contro = '';
+        $user_data = [];
         if($view > 0 ){
             $user_contro = UserContro::where('user_id',$edit)
                                 ->where('trip_id',$trip_id)
