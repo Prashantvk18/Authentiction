@@ -67,11 +67,14 @@ class ExpanseController extends Controller
 
     public function expanse_view($id , $created_by){
         $user = \Auth::User();
-        $trip_id = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
-        if($user->id == $created_by || in_array($id , $trip_id)){
+        $user = \Auth::User();
+        // $trip_id = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+         $trip_data = UserData::where('trip_id' , $id)->pluck('mobile_no')->toArray();
+         $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
+         if($user->id == $trip_user || in_array( $user->mobile_no , $trip_data)){
             $is_admin = UserData::where('mobile_no', $user->mobile_no)->where('trip_id' , $id)->pluck('is_admin')->first(); 
            // $user_data = UserData::where('trip_id', $id)->get();
-            if($user->id == $created_by ){
+            if($user->id ==  $trip_user ){
                 $is_admin = 1;
             }
            $expanse_data = ExpanseData::where('trip_id', $id)->orderby('date','asc')->get();
@@ -195,11 +198,13 @@ class ExpanseController extends Controller
 
     public function user_view($id , $created_by){
         $user = \Auth::User();
-        $trip_id = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
-        if($user->id == $created_by || in_array($id , $trip_id)){
+       // $trip_id = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+        $trip_data = UserData::where('trip_id' , $id)->pluck('mobile_no')->toArray();
+        $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
+        if($user->id == $trip_user || in_array( $user->mobile_no , $trip_data)){
             $is_admin = UserData::where('mobile_no', $user->mobile_no)->where('trip_id' , $id)->pluck('is_admin')->first(); 
            // $user_data = UserData::where('trip_id', $id)->get();
-            if($user->id == $created_by ){
+            if($user->id == $trip_user ){
                 $is_admin = 1;
             }
             $user_data = UserData::where('trip_id', $id)->paginate(10);
