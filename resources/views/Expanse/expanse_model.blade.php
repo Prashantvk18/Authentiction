@@ -14,7 +14,7 @@
     <div class="row">
         <div class="form-group col-md-6">      
             <label for="price">Price</label>
-            <input type="text" name="price" class="form-control" id ="price" placeholder="Expanse Price" value="@if($edit > 0){{$expanse_data->expanse_amount}}@endif">
+            <input type="number" name="price" class="form-control" id ="price" placeholder="Expanse Price" value="@if($edit > 0){{$expanse_data->expanse_amount}}@endif">
             <span class="text-danger" id="error_expanse_price"></span>
         </div>
         <div class="form-group col-md-6"> 

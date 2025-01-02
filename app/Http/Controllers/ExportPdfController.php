@@ -265,20 +265,22 @@ class ExportPdfController extends Controller
             $user_array_count = count($user_array);
             $total_contro = 0;
             foreach ($expanse_data as $data){
-                $exclude_arr = [];
-                if($data->include_all == 0){
-                    $exclude_arr = $data->user_id != null ? explode(",", $data->user_id) : [];
-                }
-             
-                $contro_user_count = $user_array_count - count($exclude_arr);
-                $contro_distrtibute = $data->expanse_amount / $contro_user_count;
-                $per_user_contro = 0;
+                if($data->include_all == 1 or $data->user_id != ''){
+                    $exclude_arr = [];
+                    if($data->include_all == 0){
+                        $exclude_arr = $data->user_id != null ? explode(",", $data->user_id) : [];
+                    }
                 
-                if(!in_array($uid,$exclude_arr)){
-                    $per_user_contro =  $contro_distrtibute;
+                    $contro_user_count = $user_array_count - count($exclude_arr);
+                    $contro_distrtibute = $data->expanse_amount / $contro_user_count;
+                    $per_user_contro = 0;
                     
-                }
-                $total_contro = $total_contro + $per_user_contro;
+                    if(!in_array($uid,$exclude_arr)){
+                        $per_user_contro =  $contro_distrtibute;
+                        
+                    }
+                    $total_contro = $total_contro + $per_user_contro;
+                
                 $count++;
                 $html .= '
                 <tr>
@@ -289,7 +291,7 @@ class ExportPdfController extends Controller
                     <td style="line-height: 15px;">' . htmlspecialchars($per_user_contro) . '</td>
                     
                  </tr>';
-                
+                }
             }
             
             $html .= '

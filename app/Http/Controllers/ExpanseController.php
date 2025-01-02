@@ -173,18 +173,20 @@ class ExpanseController extends Controller
         }
         $user_array_count = count($user_array);
         foreach ($expanse_data as $data){
-            $exclude_arr = [];
-            if($data->include_all == 0){
-                $exclude_arr = $data->user_id != null ? explode(",", $data->user_id) : [];
-            }
-            $contro_user_count = $user_array_count - count($exclude_arr);
-            $contro_distrtibute = $data->expanse_amount / $contro_user_count;
-            foreach($user_array as $id => $value) {
-                if(!in_array($id,$exclude_arr)){
-                    $user_array[$id] = $value + $contro_distrtibute;
+            if($data->include_all == 1 or $data->user_id != ''){
+                $exclude_arr = [];
+                if($data->include_all == 0){
+                    $exclude_arr = $data->user_id != null ? explode(",", $data->user_id) : [];
                 }
-            }
-            $final_expanses = $final_expanses +  $data->expanse_amount;
+                $contro_user_count = $user_array_count - count($exclude_arr);
+                $contro_distrtibute = $data->expanse_amount / $contro_user_count;
+                foreach($user_array as $id => $value) {
+                    if(!in_array($id,$exclude_arr)){
+                        $user_array[$id] = $value + $contro_distrtibute;
+                    }
+                }
+                $final_expanses = $final_expanses +  $data->expanse_amount;
+                }
         }
           
             $trip_final_data = TripData::where('id',$request->trip_id)->first();
