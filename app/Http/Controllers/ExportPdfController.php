@@ -180,7 +180,7 @@ class ExportPdfController extends Controller
                     <tr>
                     <td style="line-height: 15px; width: 50px;">' . $count . '</td>
                     <td style="line-height: 15px;">' . htmlspecialchars($val->contro_name) . $msg .'</td>
-                    <td style="line-height: 15px;">' . htmlspecialchars($val->contro_amount) . '</td>
+                    <td style="line-height: 15px;">' . htmlspecialchars(round($val->contro_amount)) . '</td>
                 </tr>';
                 }
                 
@@ -190,7 +190,7 @@ class ExportPdfController extends Controller
                 <tr>
                     <td></td>
                     <td style="color:red">Total Contro :</td>
-                    <td style="color:red">'. $user_name->total_contro .'</td>
+                    <td style="color:red">'. round($user_name->total_contro) .'</td>
                 </tr>
                 </tfoot>
                 </table>';

@@ -163,7 +163,6 @@ class ExpanseController extends Controller
     }
     
     public function calculate_contro(Request $request){
-        
         $expanse_data = ExpanseData::where('trip_id',$request->trip_id)->get();
         $user_data = UserData::where('trip_id' , $request->trip_id)->get();
         $final_expanses = 0;
@@ -198,7 +197,7 @@ class ExpanseController extends Controller
             //$user_data = UserData::where('trip_id' , $request->trip_id)->whereNotIn('id',$exclude_arr )->get();
             //$per_user_contro = $data->expanse_amount / count($user_data);
             foreach ($user_data as $data1) {
-                $data1->total_balance = $user_array[$data1->id];
+                $data1->total_balance = round($user_array[$data1->id]);
                 $data1->save();
             }
         

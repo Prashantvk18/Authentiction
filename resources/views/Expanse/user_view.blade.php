@@ -46,12 +46,12 @@
                         <td>{{$user_data->firstItem() + $srno }}</td>
                         <td>{{$data->user_name}}</td>
                         <td>{{$data->mobile_no}}</td>
-                        <td>{{$data->total_contro}}</td>
-                        <td>{{$data->total_balance}}</td>
+                        <td>{{round($data->total_contro)}}</td>
+                        <td>{{round($data->total_balance)}}</td>
                         <?php
-                        $balance = $data->total_balance - $data->total_contro
+                        $balance = round($data->total_balance) - round($data->total_contro)
                         ?>
-                        <td @if($balance > 0 ) style="color:red" @else style="color:green" @endif>{{$balance}}</td>
+                        <td @if(round($balance) > 0 ) style="color:red" @else style="color:green" @endif>{{round($balance)}}</td>
                         <td>
                             <button title="View Contro" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},1,{{$data->trip_id}});"><i class="fa fa-eye"><i class="fa fa-wallet"></i></i></button>
                             @if($is_admin == 1)
@@ -73,8 +73,8 @@
                     <td></td>
                     <td></td>
                     <td style="color:red">Total :</td>
-                    <td style="color:green">{{ $total_contro }}</td>
-                    <td style="color:red">{{ $total_expanse }}</td>
+                    <td style="color:green">{{ round($total_contro) }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ≈</td>
+                    <td style="color:red">{{ round($total_expanse) }}</td>
                     <td></td>
                     <td></td>
             </tfoot>
