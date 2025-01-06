@@ -4,9 +4,10 @@ $gender = ['M' => 'Male' , 'F' => 'Female' , 'O' => 'Other'];
 ?>
 <form id="donar_data">
 @csrf
-@if($edit > 0)
+    @if($edit > 0)
     <input value="{{$edit}}" style="display:none" name="edit">
     @endif
+    <input value="" style="display:none" name="auto_fill">
     <div class="form-group">
         <label for="donar_name">Name:</label>
         <input id="donar_name" type="text" name="donar_name" class="form-control"
@@ -18,7 +19,10 @@ $gender = ['M' => 'Male' , 'F' => 'Female' , 'O' => 'Other'];
         <label for="mobile_no">Mobile No:</label>
         <input id="mobile_no" type="text" name="mobile_no" class="form-control"
         value="@if($edit > 0) {{$blood_data->mobile_no}} @endif">
-        <span class="text-danger error" id="error_mobile_no"></span>
+        <span class="text-danger error" id="error_mobile_no"></span><br>
+        @if($gainer == 0 )
+            <button  class="btn" onclick="auto_filled()"><i>Search</i></button>
+        @endif
     </div>
     
     <div class="form-group">
@@ -136,30 +140,66 @@ $gender = ['M' => 'Male' , 'F' => 'Female' , 'O' => 'Other'];
         $('#dob').on('change', function() {
             calculate_age();
         });
-        function calculate_age(){
-            
-                const birthdate = new Date($("#dob").val());
-                const today = new Date();
-                let age = today.getFullYear() - birthdate.getFullYear();
-                const monthDifference = today.getMonth() - birthdate.getMonth();
-                // Adjust age if birthdate's month and day have not yet occurred this year
-                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthdate.getDate())) {
-                    age--;
-                }
-                if(age >= 18 ){
-                    $('#ageResult').text(`You are ${age} years old.`).css('color','green');
-                    $("#submit_data").prop('disabled' , false);
-
-                }else{
-                    $('#ageResult').text(`You are ${age} years old.`).css('color','red');
-                    $("#submit_data").prop('disabled' , true);
-                    
-                }
-                return true;
-        }
+       
         
      });
+    function auto_filled(){
+        var mobile_no = $('#mobile_no').val();
+        console.log(mobile_no);
+        event.preventDefault();
+        $.ajax({
+            header : {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+            },
+            type:'get',
+            url:"{{url('get_user_data')}}",
+            data : {
+                mobile_no : mobile_no
+            },
+            success : function(response){
+                if( response.data != ''){
+                    $("#donar_name").val(response.data.Donar_name);
+                    $("#donar_address").val(response.data.address);
+                    $("#dob").val(response.data.DOB);
+                    calculate_age();
+                    $("#gender").val(response.data.gender);
+                    $("#weight").val(response.data.weight);
+                    $("#blood_grp").val(response.data.blood_grp);
+                    $("#occupation").val(response.data.occupation);
+                    $("#error_mobile_no").css('display' , '').html('Record found');
+                }else{
+                    $("#error_mobile_no").css('display' , '').html('No record found');
+                }
+                
+            },
+            error : function(response){
+                $("#error_mobile_no").css('display' , '').html(response.responseJSON.errors);
+            }
+        });
 
+    }
+
+    function calculate_age(){
+            
+            const birthdate = new Date($("#dob").val());
+            const today = new Date();
+            let age = today.getFullYear() - birthdate.getFullYear();
+            const monthDifference = today.getMonth() - birthdate.getMonth();
+            // Adjust age if birthdate's month and day have not yet occurred this year
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthdate.getDate())) {
+                age--;
+            }
+            if(age >= 18 ){
+                $('#ageResult').text(`You are ${age} years old.`).css('color','green');
+                $("#submit_data").prop('disabled' , false);
+
+            }else{
+                $('#ageResult').text(`You are ${age} years old.`).css('color','red');
+                $("#submit_data").prop('disabled' , true);
+                
+            }
+            return true;
+    }
     function submit_donor(){
         var form_data = $("#donar_data").serialize();
         $(".error").css('display' , 'none');

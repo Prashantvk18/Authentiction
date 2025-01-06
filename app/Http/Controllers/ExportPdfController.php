@@ -180,7 +180,7 @@ class ExportPdfController extends Controller
                     <tr>
                     <td style="line-height: 15px; width: 50px;">' . $count . '</td>
                     <td style="line-height: 15px;">' . htmlspecialchars($val->contro_name) . $msg .'</td>
-                    <td style="line-height: 15px;">' . htmlspecialchars(round($val->contro_amount)) . '</td>
+                    <td style="line-height: 15px;">' . htmlspecialchars($val->contro_amount) . '</td>
                 </tr>';
                 }
                 
@@ -190,7 +190,7 @@ class ExportPdfController extends Controller
                 <tr>
                     <td></td>
                     <td style="color:red">Total Contro :</td>
-                    <td style="color:red">'. round($user_name->total_contro) .'</td>
+                    <td style="color:red">'. $user_name->total_contro .'</td>
                 </tr>
                 </tfoot>
                 </table>';
@@ -311,6 +311,105 @@ class ExportPdfController extends Controller
             
             // Output the PDF
             return $pdf->Output($user_name->user_name.'_'.$trip_name->trip_name.'_expanse.pdf' ); // 'D' to download the file
+        }
+        
+        Die("You are not member of this trip");
+    }
+
+    public function export_user_pdf(Request $request){
+        $trip_id = $request->tid;
+        //$uid = $request->uid;
+        $permission = $this->admin_permission($trip_id);
+        if($permission){
+                $date = date('d-m-Y');
+            // Fetch data from database or any other source
+            // $vapt_data = VAPT::all(); // Replace with your actual model and query
+            $pdf = new TCPDF();
+            
+            // Set document information
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Prashant Jain');
+            $pdf->SetTitle('Per User Expanse List');
+            $pdf->SetSubject('PDF Export');
+
+            // Set default header and footer fonts
+            $pdf->setHeaderFont(Array('helvetica', '', 12));
+            $pdf->setFooterFont(Array('helvetica', '', 10));
+
+            // Set margins
+            $pdf->SetMargins(5, 5,5);
+            $pdf->SetHeaderMargin(5);
+            $pdf->SetFooterMargin(5);
+
+            // Set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, 10);
+
+            // Set font
+            $pdf->SetFont('helvetica', '', 10);
+
+            // Add a page
+            $pdf->AddPage();
+           // $expanse_data = UserContro::where('user_id', $uid)->get();
+            $trip_name = TripData::where('id', $trip_id)->first();
+            //$user_name = UserData::where('id' , $uid)->first();
+            $count = 0;
+            $html = '
+            <h1>'.$trip_name->trip_name.'  Trip  ('.$trip_name->start_date.' - '.$trip_name->End_date.')</h1>
+            <table border="0.5" cellpadding="2" cellspacing="">
+                <thead>
+                    <tr>
+                    <th style="width: 50px;">Sr. No.</th>
+                    <th>User Name</th>
+                    <th>Mobile No.</th>
+                    <th>Total Contro</th>
+                    <th>Total Expanse</th>
+                    <th>Balance</th>
+
+                    </tr>
+                </thead>
+                <tbody>';
+                $total_contro = 0;
+
+            $trip_data = TripData::where('id',$trip_id)->first();
+            $user_data = UserData::where('trip_id' , $trip_id)->get();
+            $user_array=[];
+            $total_contro = 0;
+            $total_expanse = 0;
+            foreach ($user_data as $data){
+                
+                $count++;
+                $html .= '
+                <tr>
+                    <td style="line-height: 15px; width: 50px;">' . $count . '</td>
+                    <td style="line-height: 15px;">' . htmlspecialchars($data->user_name) . '</td>
+                    <td style="line-height: 15px;">' . htmlspecialchars($data->mobile_no) . '</td>
+                    <td style="line-height: 15px;">' . htmlspecialchars($data->total_contro) . '</td>
+                    <td style="line-height: 15px;">' . htmlspecialchars($data->total_balance) . '</td>
+                    <td style="line-height: 15px;">' . htmlspecialchars($data->total_contro - $data->total_balance) . '</td>
+                    
+                 </tr>';
+            $total_contro = $total_contro + $data->total_contro;
+            $total_expanse = $total_expanse + $data->total_balance;
+            }
+            
+            
+            $html .= '
+            </tbody>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td style="color:red">Total  :</td>
+                <td style="color:green">'.$total_expanse.'</td>
+                <td style="color:red">'.$total_contro.'</td>
+            </tr>
+            </tfoot>
+            </table>';
+            // Output the HTML content
+            $pdf->writeHTML($html, true, false, true, false, '');
+            
+            // Output the PDF
+            return $pdf->Output($trip_name->trip_name.'_detail.pdf' ); // 'D' to download the file
         }
         
         Die("You are not member of this trip");

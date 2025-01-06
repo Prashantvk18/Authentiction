@@ -46,12 +46,12 @@
                         <td>{{$user_data->firstItem() + $srno }}</td>
                         <td>{{$data->user_name}}</td>
                         <td>{{$data->mobile_no}}</td>
-                        <td>{{round($data->total_contro)}}</td>
-                        <td>{{round($data->total_balance)}}</td>
+                        <td>{{$data->total_contro}}</td>
+                        <td>{{$data->total_balance}}</td>
                         <?php
-                        $balance = round($data->total_balance) - round($data->total_contro)
+                        $balance = $data->total_balance- $data->total_contro;
                         ?>
-                        <td @if(round($balance) > 0 ) style="color:red" @else style="color:green" @endif>{{round($balance)}}</td>
+                        <td @if(round($balance) > 0 ) style="color:red" @else style="color:green" @endif>{{$balance}}</td>
                         <td>
                             <button title="View Contro" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},1,{{$data->trip_id}});"><i class="fa fa-eye"><i class="fa fa-wallet"></i></i></button>
                             @if($is_admin == 1)
@@ -79,6 +79,10 @@
                     <td></td>
             </tfoot>
         </table>
+        <form action="{{url('export_user_pdf')}}" method = "get" class="d-inline-block mr-2">
+            <input value="{{$trip_id}}" style="display:none" name="tid">
+            <button type="submit" class="btn btn-success" vaue="1" >Generate Pdf</button>   
+        </form>
     </div>
 </div>
 <script>

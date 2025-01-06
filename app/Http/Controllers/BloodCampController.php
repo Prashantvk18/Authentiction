@@ -278,4 +278,17 @@ class BloodCampController extends Controller
             'data' => $data
         ]);
     }
+
+    public function get_user_data(){
+        $mobile_no = $_GET['mobile_no'];
+
+        if ($mobile_no == '') {
+            return response()->json(['errors' => "Mobile No required"], 400);
+        }
+        $data = Blood_Camp::where('mobile_no' ,$mobile_no)->where('gainer',0)->first();
+        if($data == ''){
+            $data = '';
+        }
+        return response()->json(['data' => $data]);
+    }
 }
