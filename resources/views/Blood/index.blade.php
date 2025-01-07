@@ -29,9 +29,8 @@
     </style>
 </head>
 <body> 
-
   <!-- Modal -->
-  <div id="myModal" class="modal fade" role="dialog">
+    <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
@@ -150,75 +149,74 @@
                 <a onClick = 'export_pdf();' class="btn btn-success">Export to PDF</a>
             </div> -->
         </div>
-                <p><span style="color:blue">Total Record :{{$count['data_total_count']}} &nbsp;</span>
-                @if($is_gainer == 0)<span style="color:green"> Success:{{$count['success_count']}}&nbsp;&nbsp;</span>  <span style="color:red"> Reject : {{$count['reject_count']}}&nbsp;&nbsp;</span>
-                <span style="color:purple"> Pending : {{$count['pending_count']}} </span>@endif</p>
-                <table id="blood_data_table" class="table table-hover">
-                    <thead>
-                        <tr>
-                        <th>Sr. No</th>
-                            <th>@if($is_gainer == 0)Donar Name @else Patient Name @endif</th>
-                            <th>Mobile No.</th>
-                            <th>Gender</th>
-                            <th>Blood Group</th>
-                            <th>@if($is_gainer == 0)Status @else Hospital @endif</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php $srno = 0?>
-                        
-                        @foreach( $blood_data as $data)
-                        <tr>
-                        <td>{{$blood_data->firstItem() + $srno }}</td>
-                        <td>{{$data->Donar_name}}</td>
-                        <td>{{$data->mobile_no}}</td>
-                        <td>{{$data->gender}}</td>
-                        <td>{{$data->blood_grp}}</td>
-                        @if($is_gainer == 1)
-                        <td>{{$data->hospital}}</td>
-                        @else
-                        <td
-                        style = "color  : 
-                        @if($data->is_success == 'S') green @elseif($data->is_success == 'R') red @else purple @endif"
-                        >@if($data->is_success == 'S') Success @elseif($data->is_success == 'R') Reject @else Pending @endif </td>
-                        @endif
-                        <td>
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="add_donor({{$data->id}},1,0,@if($is_gainer == 1) 1 @else 0 @endif);">View</button>
-                            @if($is_admin == 1)
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="add_donor({{$data->id}},0,0,@if($is_gainer == 1) 1 @else 0 @endif);">Edit</button>
-                            <button type="button" class="btn btn-danger"  onclick="add_donor(0,0,{{$data->id}},0);">Delete</button>
+        <p><span style="color:blue">Total Record :{{$count['data_total_count']}} &nbsp;</span>
+        @if($is_gainer == 0)<span style="color:green"> Success:{{$count['success_count']}}&nbsp;&nbsp;</span>  <span style="color:red"> Reject : {{$count['reject_count']}}&nbsp;&nbsp;</span>
+        <span style="color:purple"> Pending : {{$count['pending_count']}} </span>@endif</p>
+        <table id="blood_data_table" class="table table-hover">
+            <thead>
+                <tr>
+                <th>Sr. No</th>
+                    <th>@if($is_gainer == 0)Donar Name @else Patient Name @endif</th>
+                    <th>Mobile No.</th>
+                    <th>Gender</th>
+                    <th>Blood Group</th>
+                    <th>Date</th>
+                    <th>@if($is_gainer == 0)Status @else Hospital @endif</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php $srno = 0?>
+                
+                @foreach( $blood_data as $data)
+                <tr>
+                <td>{{$blood_data->firstItem() + $srno }}</td>
+                <td>{{$data->Donar_name}}</td>
+                <td>{{$data->mobile_no}}</td>
+                <td>{{$data->gender}}</td>
+                <td>{{$data->blood_grp}}</td>
+                <td>{{$data->created_at->format('d-m-Y')}}</td>
+                @if($is_gainer == 1)
+                <td>{{$data->hospital}}</td>
+                @else
+                <td
+                style = "color  : 
+                @if($data->is_success == 'S') green @elseif($data->is_success == 'R') red @else purple @endif"
+                >@if($data->is_success == 'S') Success @elseif($data->is_success == 'R') Reject @else Pending @endif </td>
+                @endif
+                <td>
+                    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="add_donor({{$data->id}},1,0,@if($is_gainer == 1) 1 @else 0 @endif);">View</button>
+                    @if($is_admin == 1)
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="add_donor({{$data->id}},0,0,@if($is_gainer == 1) 1 @else 0 @endif);">Edit</button>
+                    <button type="button" class="btn btn-danger"  onclick="add_donor(0,0,{{$data->id}},0);">Delete</button>
+                    @endif
+                </td>
+                <tr>
+                <?php $srno++ ?>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="row">
+            <div class="col-md-4">
+                {{$blood_data->links()}}
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                    <form action="{{url('blood')}}" method='get'>
+                    @if($is_admin == 1)
+                            @if(($is_gainer) == 1 )
+                                <input type="text" class="hidden" value="1" name = "gainer_view" >
                             @endif
-                        </td>
+                            <button type="submit" name="export_pdf" value="1" class="btn btn-success">Export to PDF</button>
                         
-                        <tr>
-                        <?php $srno++ ?>
-                        @endforeach
-                    </tbody>
-                </table>
-                <div class="row">
-                    <div class="col-md-4">
-                        {{$blood_data->links()}}
-                    </div>
-                    <div class="col-md-4"></div>
-                    <div class="col-md-2"></div>
-                    <div class="col-md-2">
-                            <form action="{{url('blood')}}" method='get'>
-                            @if($is_admin == 1)
-                                    @if(($is_gainer) == 1 )
-                                        <input type="text" class="hidden" value="1" name = "gainer_view" >
-                                    @endif
-                                    <button type="submit" name="export_pdf" value="1" class="btn btn-success">Export to PDF</button>
-                                
-                            @endif
-                            </form>
-                    </div>  
-                </div>
+                    @endif
+                    </form>
+            </div>  
+        </div>
     </div>
-    
-
-    </body>
-    </html>
+</body>
+</html>
 <script>
     $(document).ready(function(){
         $("#typeSelect").on('change' , function(){
