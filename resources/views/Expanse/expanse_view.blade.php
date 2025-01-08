@@ -14,22 +14,25 @@
         </div>
     </div>
     <!---/Modal--->
-    
-    
         <div class="alert alert-success" style="display:none" id="msg_div">
             <p id="msg_success" ></p>
         </div>
-    
-<div class="container">
+    <div class="container">
     @if($is_admin == '1')
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata(0,0,0,{{$trip_id}})">Add Expanse</button>
-        
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata(0,0,0,{{$trip_id}})">Add Expanse
+        </button>
     @endif
     <form action="{{url('export_pdf')}}" method = "get" class="d-inline-block mr-2">
         <input type="hidden" value="{{$trip_id}}" name="tid">
-        <button type="submit" class="btn btn-danger" vaue="1" >Generate Pdf</button>   
+        <button type="submit" class="btn btn-danger btn-sm" vaue="1" ><i>Generate Pdf</i></button>   
     </form>
-        <br><br>
+    <form action="{{route('road_map_view' , ['id' => $trip_id ])}}" method="get" class="d-inline-block mr-2">
+    @csrf
+        <button type="submit" class="btn btn-success btn-block btn-sm">
+            <i class="fa fa-map">Add Road Map</i>
+        </button>
+    </form>
+    <br><br>
     <div class="table-responsive">
         <table class="table table-hover" id="table_data">
             <thead>
@@ -95,7 +98,7 @@
                     $("#form_data").html(response.data);
                 },
                 error : function (response){
-                    console.log(response);
+                    $("#form_data").html(response.responseJSON.error)
                 }
             });
         }

@@ -19,6 +19,7 @@ Route::group(['middleware' => 'checkedloggedin'],function() {
     require __DIR__ . '/web_routes/bloodcamp_routes.php';
     require __DIR__ . '/web_routes/expanse_routes.php';
     require __DIR__ . '/web_routes/export_pdf.php';
+    require __DIR__ . '/web_routes/road_map.php';
     Route::get('/logout',[AuthenticationController::class,'logout'])->name('logout');
     
 });

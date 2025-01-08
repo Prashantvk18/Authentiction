@@ -10,6 +10,15 @@ use App\Models\ExpanseData;
 class ExpanseController extends Controller
 {
     //
+    public function admin_permission($id){
+        $user = \Auth::user();
+        $created_by = TripData::where('id',$id)->pluck('created_by')->first();
+        $trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+        if($user->id == $created_by || in_array($id , $trip_id_arr)) {
+           return true;
+        }
+        return false;
+    }
     function expanse(){
         $user = \Auth::user();
         $trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
@@ -24,9 +33,15 @@ class ExpanseController extends Controller
     public function trip_model() {
         $edit = $_GET['edit'];
         $view = $_GET['view'];
+        $permission = $this->admin_permission($edit);
         $trip_data = TripData::where('id',$edit)->first();
-        return response()->json(
-            ['data' => view('Expanse.trip_model',['edit' => $edit , 'view' => $view , 'trip_data_all' => $trip_data])->render()]);
+        if($permission || !$trip_data ){
+            
+            return response()->json(
+                ['data' => view('Expanse.trip_model',['edit' => $edit , 'view' => $view , 'trip_data_all' => $trip_data])->render()]);
+        }
+        return response()->json(['error' => 'Something went wrong'],400);
+        
     }
 
     public function trip_save(Request $request) {
@@ -57,16 +72,19 @@ class ExpanseController extends Controller
 
     public function trip_delete(Request $request){ 
         $user = \Auth::user();
-        $trip_data = TripData::where('id', $request->delete)->first();
-        $trip_data->is_delete = 1;
-        $trip_data->update_by = $user->id;
-        $trip_data->save();
-        return response()->json(['message' => 'Form Deleted successfully']);
+        $permission = $this->admin_permission($request->delete);
+        if($permission){
+            $trip_data = TripData::where('id', $request->delete)->first();
+            $trip_data->is_delete = 1;
+            $trip_data->update_by = $user->id;
+            $trip_data->save();
+            return response()->json(['message' => 'Form Deleted successfully']);
+        }
+        return redirect()->route('expanse')->with('error', 'You are not authorized to view this page.');
 
     }
 
     public function expanse_view($id , $created_by){
-        $user = \Auth::User();
         $user = \Auth::User();
         // $trip_id = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
          $trip_data = UserData::where('trip_id' , $id)->pluck('mobile_no')->toArray();
@@ -89,6 +107,8 @@ class ExpanseController extends Controller
         $edit = $_GET['edit'];
         $view = $_GET['view'];
         $trip_id = $_GET['trip_id'];
+        $permission = $this->admin_permission($trip_id);
+        if($permission){
         $expanse_data = '';
         $expanse_data_user_arr = [];
         if($edit > 0){
@@ -101,6 +121,8 @@ class ExpanseController extends Controller
         $user_data = UserData::where('trip_id',$trip_id)->orderBy('user_name', 'asc')->get();
         return response()->json(
             ['data' => view('Expanse.expanse_model',['edit' => $edit , 'view' => $view, 'trip_id' =>$trip_id , 'user_data' => $user_data,'expanse_data'=>$expanse_data , 'exp_user_array' => $expanse_data_user_arr])->render()]);
+        }
+        return response()->json(['error' => 'Something went wrong'],400);
     }
     
     public function expanse_save(Request $request){
@@ -163,6 +185,8 @@ class ExpanseController extends Controller
     }
     
     public function calculate_contro(Request $request){
+        $permission = $this->admin_permission($request->trip_id);
+        if($permission){
         $expanse_data = ExpanseData::where('trip_id',$request->trip_id)->get();
         $user_data = UserData::where('trip_id' , $request->trip_id)->get();
         $final_expanses = 0;
@@ -202,6 +226,8 @@ class ExpanseController extends Controller
             }
         
             return response()->json(['message' => 'Calculation done']);
+        }
+        return response()->json(['message' => 'Something went wrong']);
     }
 
     public function user_view($id , $created_by){
@@ -227,8 +253,12 @@ class ExpanseController extends Controller
         $view = $_GET['view'];
         $trip_id = $_GET['trip_id'];
         $user_data = UserData::where('id',$edit)->first();
+        $permission = $this->admin_permission($trip_id);
+        if($permission || !$user_data){
         return response()->json(
             ['data' => view('Expanse.user_model',['edit' => $edit , 'view' => $view , 'trip_id' => $trip_id , 'user_data' => $user_data ])->render()]);
+        }
+        return response()->json(['error' => 'Something went wrong'],400);
     }
     
 
@@ -269,24 +299,29 @@ class ExpanseController extends Controller
         $edit = $_GET['edit'];
         $view = $_GET['view'];
         $trip_id = $_GET['trip_id'];
-        $is_admin = UserData::where('mobile_no',$user->mobile_no)->pluck('is_admin')->first();
-        $created_by = TripData::where('id',$trip_id)->pluck('created_by')->first();
-        if($user->id == $created_by){
-            $is_admin = 1;
+        $permission = $this->admin_permission($trip_id);
+        if($permission){
+            $is_admin = UserData::where('mobile_no',$user->mobile_no)->pluck('is_admin')->first();
+        
+            $user_contro = '';
+            $user_data = [];
+            if($view > 0 ){
+                $created_by = TripData::where('id',$trip_id)->pluck('created_by')->first();
+                if($user->id == $created_by){
+                    $is_admin = 1;
+                }
+                $user_contro = UserContro::where('user_id',$edit)
+                                    ->where('trip_id',$trip_id)
+                                    ->get();
+                $user_data = UserData::where('trip_id', $trip_id)
+                ->pluck('user_name', 'id')
+                ->toArray();
+            
+            }
+            return response()->json(
+                ['data' => view('Expanse.user_contro_model',['edit' => $edit , 'view' => $view, 'trip_id' => $trip_id , 'user_contro' => $user_contro ,'user_data' => $user_data , 'is_admin' => $is_admin])->render()]);
         }
-        $user_contro = '';
-        $user_data = [];
-        if($view > 0 ){
-            $user_contro = UserContro::where('user_id',$edit)
-                                ->where('trip_id',$trip_id)
-                                ->get();
-            $user_data = UserData::where('trip_id', $trip_id)
-            ->pluck('user_name', 'id')
-            ->toArray();
-           
-        }
-        return response()->json(
-            ['data' => view('Expanse.user_contro_model',['edit' => $edit , 'view' => $view, 'trip_id' => $trip_id , 'user_contro' => $user_contro ,'user_data' => $user_data , 'is_admin' => $is_admin])->render()]);
+        return response()->json(['error' => 'Something went wrong'],400);
     }
     
     public function user_contro_save(Request $request){
@@ -331,7 +366,8 @@ class ExpanseController extends Controller
     }
 
     public function user_contro_delete(Request $request){
-        
+        $permission = $this->admin_permission($request->trip_id);
+        if($permission){
         $user_split = UserContro::where('id',$request->delete)->first();
         if($user_split->to_user > 0){
             $to_user_total_contro = UserContro::where('split','split')->get();
@@ -378,20 +414,23 @@ class ExpanseController extends Controller
         $user_contro_data->total_contro = $user_total_contro;
         $user_contro_data->save();
 
-        
-
-       
-
         return response()->json(['message' => 'Form Deleted successfully']);
+        }
+        return response()->json(['error' => 'Something went wrong'],400);
     }
 
     public function user_split_model(){
+
         $edit = $_GET['edit'];
         $view = $_GET['view'];
         $trip_id = $_GET['trip_id'];
+        $permission = $this->admin_permission($trip_id);
+        if($permission){
         $user_data = UserData::where('trip_id',$trip_id)->get();
         return response()->json(
             ['data' => view('Expanse.user_split_model',['edit' => $edit , 'view' => $view , 'trip_id' => $trip_id , 'user_data' => $user_data ])->render()]);
+        }
+        return response()->json(['error' => 'Something went wrong'],400);
     }
 
     public function user_split_save(Request $request){

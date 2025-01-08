@@ -87,7 +87,8 @@
 </div>
 <script>
 
-    function get_formdata1(edit=0,view=0,trip_id=0) {       
+    function get_formdata1(edit=0,view=0,trip_id=0) {   
+        event.preventDefault();    
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
@@ -103,12 +104,13 @@
                     $("#form_data").html(response.data);
                 },
                 error : function (response){
-                    console.log(response);
+                    $("#form_data").html(response.responseJSON.error)
                 }
             });
             }
 
-            function get_formdata(edit=0,view=0,trip_id=0) {       
+            function get_formdata(edit=0,view=0,trip_id=0) {  
+                event.preventDefault();     
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
@@ -124,7 +126,7 @@
                         $("#form_data").html(response.data);
                     },
                     error : function (response){
-                        console.log(response);
+                        $("#form_data").html(response.responseJSON.error)
                     }
                 });
             }
@@ -145,7 +147,7 @@
                         $("#form_data").html(response.data);
                     },
                     error : function (response){
-                        console.log(response);
+                        $("#form_data").html(response.responseJSON.error)
                     }
                 });
             }

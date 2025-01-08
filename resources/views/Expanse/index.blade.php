@@ -1,6 +1,6 @@
 @include('User.header')
 
-</style>
+
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-sm"> <!-- Modal size adjusted for mobile -->
@@ -89,7 +89,8 @@
                 $("#form_data").html(response.data);
             },
             error: function (response){
-                console.log(response);
+                console.log(response.responseJSON.error);
+                $("#form_data").html(response.responseJSON.error);
             }
         });
     }
@@ -109,7 +110,7 @@
                     location.reload();
                 },
                 error : function (response) {
-                    console.log(response);
+                    $("#error_part").html(response.responseJSON.error)
                 }
             });
         } else {
