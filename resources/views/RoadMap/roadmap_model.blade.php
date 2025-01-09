@@ -8,33 +8,35 @@
         <input value="{{$trip_id}}" style="display:none" name="trip_id">
     @endif
     <div class="form-group"> 
-        <label for="start_date">Date:</labeL>    
-        <input type="date" name="start_date" class="form-control" placeholder="start Date:" value="@if($edit > 0){{$user_data->date}}@endif">
+        <label for="travel_date">Date:</labeL>    
+        <input type="date" name="travel_date" class="form-control" placeholder="start Date:" value="@if($edit > 0){{$roadmap_data->travel_date}}@endif">
+        <span class="text-danger" id="error_travel_date"></span>
     </div>
     <div class="row">
         <div class="form-group col-md-6">
-            <label for="frm_name">From:</label>
-            <input type="text" name="frm_name" id="frm_name" class="form-control" 
-            value="@if($edit > 0) {{$user_data->frm_name}} @endif">
-            <span class="text-danger" id="error_frm_name"></span>
+            <label for="from_place">From:</label>
+            <input type="text" name="from_place" id="from_place" placeholder="Thane" class="form-control" 
+            value="@if($edit > 0) {{$roadmap_data->from_place}} @endif">
+            <span class="text-danger" id="error_from_place"></span>
         </div>
         <div class="form-group col-md-6">
-            <label for="to_name">To:</label>
-            <input type="text" name="to_name" id="to_name" class="form-control" 
-            value="@if($edit > 0) {{$user_data->to_name}} @endif">
-            <span class="text-danger" id="error_to_name"></span>
+            <label for="to_place">To:</label>
+            <input type="text" name="to_place" id="to_place" placeholder = "Malvan" class="form-control" 
+            value="@if($edit > 0) {{$roadmap_data->to_place}} @endif">
+            <span class="text-danger" id="error_to_place"></span>
         </div>
     </div>
    
     <div class="form-group">
-        <label for="by">By:</label>
-        <input type="text" name="by" id="by" class="form-control" 
-        value="@if($edit > 0) {{$user_data->by}} @endif">
-        <span class="text-danger" id="error_by"></span>
+        <label for="by_transport">By:</label>
+        <input type="text" name="by_transport" id="by_transport" placeholder="Train" class="form-control" 
+        value="@if($edit > 0) {{$roadmap_data->by_transport}} @endif">
+        <span class="text-danger" id="error_by_transport"></span>
     </div>
     <div class="form-group">
         <label for="descrip">Description</label>
-        <textarea name="descrip" id="descrip"  class="form-control">@if($edit > 0) {{$user_data->description}} @endif</textarea>
+        <textarea name="descrip" id="descrip"  class="form-control" placeholder="eg. train,bus time and price , auto price , best place ,best hotel, hotel mobile no, etc">@if($edit > 0) {{$roadmap_data->descrip}} @endif</textarea>
+        <span class="text-danger" id="error_descrip"></span>
     </div>
     
     @if($view == 0)
@@ -47,23 +49,29 @@
 <script>
     function update_submit() {
         var data =  $("#map_data").serialize();
-        $("#frm_name").html('');
+        $("#from_place").html('');
         event.preventDefault();
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
             },
             type: 'POST',
-            url : "{{url('user_save')}}",
+            url : "{{url('roadmap_save')}}",
             data : data,
 
             success: function (response) {
                 location.reload();
             },
-            error : function (response) {
-                console.log(response);
-                var error  = response.responseJSON.errors.frm_name[0];
-                $("#error_frm_name").html(error);
+            error : function (error) {
+                console.log(error);
+              //  var error  = response.responseJSON.errors.from_place[0];
+               /// $("#error_from_place").html(error);
+                Object.keys(error.responseJSON.errors).forEach(field => {
+                    console.log(field);
+                    const errorMessage = error.responseJSON.errors[field][0];
+                    console.log(errorMessage);
+                    document.getElementById('error_' + field).innerHTML = errorMessage;
+            });
             }
         });
 

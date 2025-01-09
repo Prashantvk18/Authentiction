@@ -58,8 +58,14 @@ class ExpanseController extends Controller
         }
         $trip_data = new TripData();
         if(isset($request->edit) && $request->edit > 0){
-            $trip_data = TripData::where('id', $request->edit)->first();
-            $trip_data->update_by = $user->id;
+            $permission = $this->admin_permission($request->edit);
+            if($permission){
+                $trip_data = TripData::where('id', $request->edit)->first();
+                $trip_data->update_by = $user->id;
+            }else{
+                return response()->json(['error' => 'Form submitted failed'],400);
+            }
+            
         }else{
             $trip_data->created_by = $user->id;
         }
@@ -87,9 +93,10 @@ class ExpanseController extends Controller
     public function expanse_view($id , $created_by){
         $user = \Auth::User();
         // $trip_id = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+        $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
          $trip_data = UserData::where('trip_id' , $id)->pluck('mobile_no')->toArray();
          $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
-         if($user->id == $trip_user || in_array( $user->mobile_no , $trip_data)){
+         if(($user->id == $trip_user || in_array( $user->mobile_no , $trip_data)) && $is_delete){
             $is_admin = UserData::where('mobile_no', $user->mobile_no)->where('trip_id' , $id)->pluck('is_admin')->first(); 
            // $user_data = UserData::where('trip_id', $id)->get();
             if($user->id ==  $trip_user ){
@@ -233,9 +240,10 @@ class ExpanseController extends Controller
     public function user_view($id , $created_by){
         $user = \Auth::User();
        // $trip_id = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+       $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
         $trip_data = UserData::where('trip_id' , $id)->pluck('mobile_no')->toArray();
         $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
-        if($user->id == $trip_user || in_array( $user->mobile_no , $trip_data)){
+        if(($user->id == $trip_user || in_array( $user->mobile_no , $trip_data)) && $is_delete){
             $is_admin = UserData::where('mobile_no', $user->mobile_no)->where('trip_id' , $id)->pluck('is_admin')->first(); 
            // $user_data = UserData::where('trip_id', $id)->get();
             if($user->id == $trip_user ){

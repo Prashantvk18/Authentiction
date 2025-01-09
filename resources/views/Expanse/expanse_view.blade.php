@@ -24,11 +24,11 @@
     @endif
     <form action="{{url('export_pdf')}}" method = "get" class="d-inline-block mr-2">
         <input type="hidden" value="{{$trip_id}}" name="tid">
-        <button type="submit" class="btn btn-danger btn-sm" vaue="1" ><i>Generate Pdf</i></button>   
+        <button type="submit" class="btn btn-success btn-sm" vaue="1" ><i>Generate Pdf</i></button>   
     </form>
     <form action="{{route('road_map_view' , ['id' => $trip_id ])}}" method="get" class="d-inline-block mr-2">
     @csrf
-        <button type="submit" class="btn btn-success btn-block btn-sm">
+        <button type="submit" class="btn btn-danger btn-block btn-sm">
             <i class="fa fa-map">Add Road Map</i>
         </button>
     </form>

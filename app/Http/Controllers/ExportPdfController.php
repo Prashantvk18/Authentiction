@@ -13,9 +13,10 @@ class ExportPdfController extends Controller
 {
     public function admin_permission($id){
         $user = \Auth::user();
+        $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
         $created_by = TripData::where('id',$id)->pluck('created_by')->first();
         $trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
-        if($user->id == $created_by || in_array($id , $trip_id_arr)) {
+        if(($user->id == $created_by || in_array($id , $trip_id_arr)) && $is_delete) {
            return true;
         }
         return false;
