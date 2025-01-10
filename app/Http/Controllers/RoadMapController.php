@@ -68,7 +68,7 @@ class RoadMapController extends Controller
         if($permission){
             $user = \Auth::user();
             $rules = [
-                'travel_date' => 'required',
+                'time_taken' => 'required',
                 'from_place' => 'required',
                 'to_place'   => 'required',
                 'by_transport'=>'required',
@@ -92,7 +92,7 @@ class RoadMapController extends Controller
             $road_map->to_place = $request->to_place;
             $road_map->by_transport = $request->by_transport;
             $road_map->descrip = $request->descrip;
-            $road_map->travel_date = $request->travel_date;
+            $road_map->time_taken = $request->time_taken;
             $road_map->save();
         }
     }
@@ -115,8 +115,16 @@ class RoadMapController extends Controller
         ->delete();
         return response()->json(['message' => 'Form Deleted successfully']);
     }
-    public function trip_roadmap(){
-        $trip_data = TripData::where('is_delete' , 0)->where('submit_roadmap' , 1)->get();
+    public function trip_roadmap(Request $request){
+        $search_name = $request->search_name;
+        if($search_name != ''){
+            $trip_data = TripData::where('trip_name', 'like', '%' . $search_name . '%')
+            ->where('is_delete' , 0)
+            ->where('submit_roadmap' , 1)
+            ->orderBy('created_at', 'desc')->get();
+        }else{
+            $trip_data = TripData::where('is_delete' , 0)->where('submit_roadmap' , 1)->get();
+        }
         return view('RoadMap.trip_roadmap' , ['trip_data' => $trip_data]);
     }
 

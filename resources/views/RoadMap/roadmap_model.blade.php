@@ -7,10 +7,11 @@
     @if($trip_id > 0)
         <input value="{{$trip_id}}" style="display:none" name="trip_id">
     @endif
+    <div class="row">
     <div class="form-group"> 
-        <label for="travel_date">Date:</labeL>    
-        <input type="date" name="travel_date" class="form-control" placeholder="start Date:" value="@if($edit > 0){{$roadmap_data->travel_date}}@endif">
-        <span class="text-danger" id="error_travel_date"></span>
+        <label for="time_taken">Time Taken:</labeL>    
+        <input type="text" name="time_taken" class="form-control" placeholder="eg.5 hrs , 2 days , 1.30 hrs" value="@if($edit > 0){{$roadmap_data->time_taken}}@endif">
+        <span class="text-danger" id="error_time_taken"></span>
     </div>
     <div class="row">
         <div class="form-group col-md-6">

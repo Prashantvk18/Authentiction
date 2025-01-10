@@ -1,5 +1,18 @@
 @include('User.Header')
 <div class="container">
+    <form action="{{ url('trip_roadmap')}}" method='get'>
+        @csrf
+        <div class="container" style=" float: inline-end;">
+            <input type="hidden" value='1' name='check_default'>
+            <input  type="text" name="search_name" placeholder="Search by name" id="search_name" >
+            <span class="text-danger"></span>
+            
+            <button type="submit" class = "btn btn-info btn-sm">Search</button>
+        </div>
+    </form>
+
+<br><br>
+
 <div class="table-responsive">
         <table class="table table-hover">
             <thead>
@@ -21,5 +34,6 @@
                 @endforeach
             </tbody>
         </table>
+</div>
 </div>
 @include('User.Footer')

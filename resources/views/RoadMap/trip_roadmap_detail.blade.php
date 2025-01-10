@@ -1,10 +1,10 @@
 @include('User.Header')
 <div class="container">
     @foreach($roadmap_data as $data)
-    <h3><u><i><b>{{$data->from_place}} - {{$data->to_place}} ( {{$data->travel_date}} )
-        By {{$data->by_transport}} 
-    </b></i></u></h3>
-    <h4>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----&nbsp;&nbsp;<i>{{$data->descrip}}</i></h4>
+    <h4><u><i><b>{{$data->from_place}} - {{$data->to_place}}
+        By {{$data->by_transport}} took {{$data->time_taken}}
+    </b></i></u></h4>
+    <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----&nbsp;&nbsp;<i>{{$data->descrip}}</i></h5>
         <br>
     @endforeach
 </div>

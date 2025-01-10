@@ -28,11 +28,11 @@
             <thead>
                 <tr>
                     <th>Sr. No.</th>
-                    <th>Date</th>
                     <th>From place</th>
                     <th>To place</th>
                     <th>By transport</th>
-                    <th>Detail</th>
+                    <th>Time Taken</th>
+                    <th style="width:350px">Detail</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -44,11 +44,11 @@
                 <?php $total_expanse = $total_expanse + $data->expanse_amount; ?>
                     <tr>
                         <td>{{ $srno }}</td>
-                        <td>{{$data->travel_date}}</td>
                         <td>{{$data->from_place}}</td>
                         <td>{{$data->to_place}}</td>
                         <td>{{$data->by_transport}}</td>
-                        <td>{{$data->descrip}}</td>
+                        <td>{{$data->time_taken}}</td>
+                        <td> {{ Str::words($data->descrip, 10, '...') }}</td>
                         <td>
                             <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},1,0,{{$trip_id}});"><i class="fa fa-eye"></i></button>
                             @if($admin == 1)
@@ -64,8 +64,7 @@
         @if($admin == 1)
             <button type="button" class="btn btn-success" onclick="submit_roadmap({{$trip_id}},0);"><i>Submit</i></button>
             <button type="button" class="btn btn-danger" onclick="submit_roadmap({{$trip_id}},1);"><i>Remove</i></button>
-            
-            <!---<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},0,1,0);">Delete expanse</button>--->
+           
         @endif
         <br>
     </div>

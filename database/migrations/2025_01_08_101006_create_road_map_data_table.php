@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('to_place');
             $table->string('by_transport');
             $table->string('descrip');
-            $table->date('travel_date')->default(null);
+            $table->string('time_taken')->default(0);
             $table->string('created_by');
             $table->string('updated_by')->default(0);
             $table->timestamps();
