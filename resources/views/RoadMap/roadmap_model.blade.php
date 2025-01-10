@@ -42,7 +42,7 @@
     
     @if($view == 0)
 				<div class="from-group">
-						<button class="form-control btn-success mt-5" onclick="update_submit();">Submit</button>
+						<button class="form-control btn-success mt-5 btn-sm" onclick="update_submit();">Submit</button>
 				</div>
     @endif
 </form>

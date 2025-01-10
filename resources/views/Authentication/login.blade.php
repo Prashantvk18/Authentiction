@@ -33,7 +33,8 @@
                 </div>
                 <a href="/register">Create an account</a>
                 <a href="/register" class="ml-3">Forgot Password</a>
-                
+                <br>
+               &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Developed By Virat Kohli 2025
             </div>
         </div>
     </div>

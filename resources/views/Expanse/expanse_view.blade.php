@@ -54,9 +54,9 @@
                         <td>{{$data->expanse_name}}</td>
                         <td>{{$data->expanse_amount}}</td>
                         <td>
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},1,0,{{$trip_id}});"><i class="fa fa-eye"></i></button>
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},1,0,{{$trip_id}});"><i class="fa fa-eye"></i></button>
                             @if($is_admin == '1')
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},0,0,{{$trip_id}});"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},0,0,{{$trip_id}});"><i class="fa fa-edit"></i></button>
                                 <!---<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},0,1,0);">Delete expanse</button>--->
                             @endif
                         </td>
@@ -76,7 +76,7 @@
         <br>
     </div>
     @if($is_admin == '1')
-        <button type="button" class="btn btn-warning" onclick="calculate_contro({{$trip_id}})">Calculate Contro</button>
+        <button type="button" class="btn btn-warning btn-sm" onclick="calculate_contro({{$trip_id}})">Calculate Contro</button>
     @endif
 </div>
 

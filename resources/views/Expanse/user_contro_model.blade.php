@@ -16,7 +16,7 @@
             <input type="text" name="product" class="form-control" placeholder="product" value="">
         </div>
                     <div class="from-group">
-                            <button class="form-control btn-success mt-5" onclick="update_submit();">Submit</button>
+                            <button class="form-control btn-success btn-sm mt-5" onclick="update_submit();">Submit</button>
                     </div>
 
     </form>
@@ -82,7 +82,7 @@
                             <td></td>
                             @else
                             <td>
-                            <button type="button" class="btn btn-danger d-inline-block mr-2" data-toggle="modal" data-target="#myModal" onclick="delete_formdata({{$data->id}},{{$edit}},{{$trip_id}});"><i class="fa fa-trash"></i></button>
+                            <button type="button" class="btn btn-danger btn-sm d-inline-block mr-2" data-toggle="modal" data-target="#myModal" onclick="delete_formdata({{$data->id}},{{$edit}},{{$trip_id}});"><i class="fa fa-trash"></i></button>
                             </td>
                                 @endif
                         @endif
@@ -95,7 +95,7 @@
         <form action="{{url('export_user_contro_pdf')}}" method = "get" class="d-inline-block mr-2">
             <input type="hidden" value="{{$edit}}" name="uid">
             <input value="{{$trip_id}}" style="display:none" name="tid">
-            <button type="submit" class="btn btn-success" vaue="1" >Generate Pdf</button>   
+            <button type="submit" class="btn btn-success btn-sm" vaue="1" >Generate Pdf</button>   
         </form>
     </div>
 <script>

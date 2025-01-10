@@ -50,9 +50,9 @@
                         <td>{{$data->time_taken}}</td>
                         <td> {{ Str::words($data->descrip, 10, '...') }}</td>
                         <td>
-                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},1,0,{{$trip_id}});"><i class="fa fa-eye"></i></button>
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},1,0,{{$trip_id}});"><i class="fa fa-eye"></i></button>
                             @if($admin == 1)
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},0,0,{{$trip_id}});"><i class="fa fa-edit"></i></button>
+                                <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},0,0,{{$trip_id}});"><i class="fa fa-edit"></i></button>
                                 <button type="button" class="btn btn-danger  btn-sm d-inline-block mr-2" onclick="delete_formdata({{$data->id}});"><i class="fa fa-trash"></i></button>
                            @endif
                         </td>

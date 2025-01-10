@@ -16,8 +16,8 @@
 
 <div class="container">
     @if($is_admin == 1)
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata1(0,0,{{$trip_id}})">Add User</button>
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_split_formdata(0,0,{{$trip_id}})">Split Contro</button>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata1(0,0,{{$trip_id}})">Add User</button>
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_split_formdata(0,0,{{$trip_id}})">Split Contro</button>
         <br><br>
     @endif
     <div class="table-responsive">
@@ -53,15 +53,15 @@
                         ?>
                         <td @if(round($balance) > 0 ) style="color:red" @else style="color:green" @endif>{{$balance}}</td>
                         <td>
-                            <button title="View Contro" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},1,{{$data->trip_id}});"><i class="fa fa-eye"><i class="fa fa-wallet"></i></i></button>
+                            <button title="View Contro" type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},1,{{$data->trip_id}});"><i class="fa fa-eye"><i class="fa fa-wallet"></i></i></button>
                             @if($is_admin == 1)
-                                <button title="Edit User" type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal" onclick="get_formdata1({{$data->id}},0,{{$data->trip_id}});"><i class="fa fa-edit"></i><i class="fa fa-user"></i></button>
-                                <button title="Add Contro" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},0,{{$data->trip_id}});"><i class="fa fa-plus"></i><i class="fa fa-wallet"></i></button>
+                                <button title="Edit User" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata1({{$data->id}},0,{{$data->trip_id}});"><i class="fa fa-edit"></i><i class="fa fa-user"></i></button>
+                                <button title="Add Contro" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata({{$data->id}},0,{{$data->trip_id}});"><i class="fa fa-plus"></i><i class="fa fa-wallet"></i></button>
                             @endif
                             <form action="{{url('export_user_expanse_pdf')}}" method = "get" class="d-inline-block mr-2">
                                 <input type="hidden" value="{{$data->trip_id}}" name="tid">
                                 <input type="hidden" value="{{$data->id}}" name="uid">
-                                <button type="submit" name="Expanse PDF" class="btn btn-success" vaue="1" ><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>   
+                                <button type="submit" name="Expanse PDF" class="btn btn-success btn-sm" vaue="1" ><i class="fa fa-file-pdf-o" aria-hidden="true"></i></button>   
                             </form>
                         </td>
                     </tr>
@@ -81,7 +81,7 @@
         </table>
         <form action="{{url('export_user_pdf')}}" method = "get" class="d-inline-block mr-2">
             <input value="{{$trip_id}}" style="display:none" name="tid">
-            <button type="submit" class="btn btn-success" vaue="1" >Generate Pdf</button>   
+            <button type="submit" class="btn btn-success btn-sm" vaue="1" >Generate Pdf</button>   
         </form>
     </div>
 </div>

@@ -1,10 +1,10 @@
-<style>
+<!---<style>
   footer {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 20px;
-    position: relative;
+    position: fixed;
     bottom: 0;
     width: 100%;
     font-family: Arial, sans-serif;
@@ -28,6 +28,7 @@
 @media (max-width: 768px) {
     footer {
         padding: 15px; /* Slightly reduced padding on smaller screens */
+        position: relative;
     }
 
     .footer-content {
@@ -43,7 +44,7 @@
         <p>Developed by <strong>Your Name</strong></p>
         <p>Contact: <a href="mailto:your-email@gmail.com">your-email@gmail.com</a></p>
     </div>
-</footer>
+</footer>--->
 
 </body>
 </html>
