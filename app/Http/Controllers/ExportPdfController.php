@@ -8,6 +8,7 @@ use App\Models\ExpanseData;
 use App\Models\TripData;
 use App\Models\UserData;
 use App\Models\UserContro;
+use App\Models\RoadMapData;
 
 class ExportPdfController extends Controller
 {
@@ -406,6 +407,66 @@ class ExportPdfController extends Controller
             </tr>
             </tfoot>
             </table>';
+            // Output the HTML content
+            $pdf->writeHTML($html, true, false, true, false, '');
+            
+            // Output the PDF
+            return $pdf->Output($trip_name->trip_name.'_detail.pdf' ); // 'D' to download the file
+        }
+        
+        Die("You are not member of this trip");
+    }
+
+    public function export_roadmap_pdf(Request $request){
+        $trip_id = $request->tid;
+        //$uid = $request->uid;
+        $permission = $this->admin_permission($trip_id);
+        if($permission){
+                $date = date('d-m-Y');
+            // Fetch data from database or any other source
+            // $vapt_data = VAPT::all(); // Replace with your actual model and query
+            $pdf = new TCPDF();
+            
+            // Set document information
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Prashant Jain');
+            $pdf->SetTitle('Road Map detail');
+            $pdf->SetSubject('PDF Export');
+
+            // Set default header and footer fonts
+            $pdf->setHeaderFont(Array('helvetica', '', 12));
+            $pdf->setFooterFont(Array('helvetica', '', 10));
+
+            // Set margins
+            $pdf->SetMargins(5, 5,5);
+            $pdf->SetHeaderMargin(5);
+            $pdf->SetFooterMargin(5);
+
+            // Set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, 10);
+
+            // Set font
+            $pdf->SetFont('helvetica', '', 10);
+
+            // Add a page
+            $pdf->AddPage();
+           // $expanse_data = UserContro::where('user_id', $uid)->get();
+            $trip_name = TripData::where('id', $trip_id)->first();
+            //$user_name = UserData::where('id' , $uid)->first();
+            $count = 0;
+            $roadmap_data = RoadMapData::where('trip_id' , $trip_id)->get();
+            $html = '
+            <h1>'.$trip_name->trip_name.'  Trip  Detail</h1>
+            <div class="container">';
+            foreach($roadmap_data as $data){
+                $html .= '<h4><u><i><b>'.$data->from_place .' - '.$data->to_place .'
+                By'. $data->by_transport.' took '. $data->time_taken.'
+            </b></i></u></h4>
+            <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----&nbsp;&nbsp;<i> '.$data->descrip.' </i></h5>
+                <br>';
+            };
+            
+            $html .= '</div>';
             // Output the HTML content
             $pdf->writeHTML($html, true, false, true, false, '');
             

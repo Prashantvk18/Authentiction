@@ -27,6 +27,67 @@
             padding : 3px;
         }
     </style>
+    <style>
+    /* Navbar improvements */
+
+   
+    .navbar {
+        background-color: #63a4ba !important;
+        padding: 10px 0;
+    }
+
+    .navbar-brand {
+        font-family: 'Arial', sans-serif;
+        color: #fff !important;
+        font-weight: 700;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 1.1rem;
+        color: #f8f9fa !important;
+        padding: 8px 16px;
+    }
+
+    .navbar-nav .nav-link:hover {
+        color: #ffcc00 !important;
+        background-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .navbar-nav .nav-item.active .nav-link {
+        color: #ffcc00 !important;
+        font-weight: bold;
+    }
+
+    .dropdown-menu {
+        background-color: #0056b3;
+        border: none;
+    }
+
+    .dropdown-item {
+        color: #f8f9fa !important;
+    }
+
+    .dropdown-item:hover {
+        background-color: #004085;
+        color: #ffcc00 !important;
+    }
+
+    .navbar-toggler {
+        border: none;
+    }
+
+    .navbar-toggler-icon {
+        background-color: #fff;
+    }
+
+    /* Custom styles for larger screens */
+    @media (min-width: 992px) {
+        .navbar-nav {
+            align-items: center;
+        }
+    }
+</style>
 </head>
 <body> 
   <!-- Modal -->
@@ -74,10 +135,12 @@
                             Dropdown link
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="/csv_view">Create CSV</a></li>
-                            <li><a class="dropdown-item" href="/vapt_index">VAPT</a></li>
-                            <li><a class="dropdown-item" href="/blood">Blood</a></li>
-                        </ul>
+                        <li><a class="dropdown-item" href="/csv_view">Create CSV</a></li>
+                        <li><a class="dropdown-item" href="/vapt_index">VAPT</a></li>
+                        <li><a class="dropdown-item" href="/blood">Blood</a></li>
+                        <li><a class="dropdown-item" href="/expanse">Expanse</a></li>
+                        <li><a class="dropdown-item" href="/trip_roadmap">Road Map</a></li>
+                    </ul>
                     </li> 
             
                     <li class="nav-item">

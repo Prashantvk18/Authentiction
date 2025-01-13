@@ -2,6 +2,5 @@
 use App\Http\Controllers\AuthenticationController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/home' , function(){
-    return view('User.home');
-});
+
+Route::get('/home' , [AuthenticationController::class , 'home'])->name('home');

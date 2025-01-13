@@ -7,7 +7,9 @@
     <h5>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;----&nbsp;&nbsp;<i>{{$data->descrip}}</i></h5>
         <br>
     @endforeach
+    <form action="{{url('export_roadmap_pdf')}}" method = "get" class="d-inline-block mr-2">
+        <input type="hidden" value="{{$trip_id}}" name="tid">
+        <button type="submit" class="btn btn-primary btn-sm" vaue="1" ><i>Generate Pdf</i></button>   
+    </form>
 </div>
-
-    
 @include('User.footer')

@@ -4,7 +4,7 @@
         <div class="row justify-content-center mt-20">
             <div class="col-sm-4"> 
                 <div class="card mt-5 p-3" >
-                    <h3>USER REGISTER</h3>
+                    <h3 class="text-center mb-4 text-primary">Create User</h3>
                     @if (Session::has('error'))
                         <p class="text-danger">{{ Session::get('error') }}</p>
                     @endif
@@ -50,19 +50,59 @@
                        
 
                         <div class="form-group">
-                            <button  id= "myButton" class=" mt-3s btn btn-success form-control">Create User</button>
+                            <button  id= "myButton" class="btn btn-primary btn-block">Create User</button>
                         </div>
-                        <div class="form-group" style="float-inline-end">
-                            <a href="/">Already have account!!</a>
+                        <div class="form-group text-center" style="float-inline-end">
+                            <a href="/" class="text-info">Already have account!!</a>
                         </div>
-
-                        
+                        <p class="text-center mt-4 text-muted small">
+                            &copy; 2025 Developed by Virat Kohli
+                        </p>  
                     </form>
                     <div><img id = "image"></div>
                 </div>
             </div>
         </div>
     </div>
+    <style>
+    body {
+        background-color: #f4f6f9;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .card {
+        background-color: #fff;
+        border-radius: 10px;
+    }
+    .card-header, .card-body {
+        padding: 1.5rem;
+    }
+    .card-title {
+        font-size: 1.5rem;
+        color: #007bff;
+    }
+    .btn {
+        padding: 10px;
+        font-size: 1rem;
+    }
+    .btn-block {
+        width: 100%;
+    }
+    .form-control {
+        border-radius: 5px;
+        border: 1px solid #ced4da;
+        box-shadow: none;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+    }
+    .alert-danger {
+        margin-top: 20px;
+        font-size: 0.9rem;
+    }
+    .text-info {
+        font-size: 0.9rem;
+    }
+</style>
     <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js"></script>
 <!-- Include other Firebase modules if needed -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>

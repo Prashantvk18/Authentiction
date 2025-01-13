@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+use App\Models\TripData;
+use App\Models\UserData;
 
 class AuthenticationController extends Controller
 {
@@ -47,7 +49,9 @@ class AuthenticationController extends Controller
 
         
         if(\Auth::attempt($request->only('mobile_no','password'))){
-            
+            $user = \Auth::user();
+            Session::put('user_name' , $user->name);
+            Session::put('is_admin' , $user->is_admin);
             return view('User.home');        
         }
         return redirect('/')->withError('Invalid Credential');
@@ -86,6 +90,26 @@ class AuthenticationController extends Controller
         \Auth::logout();
         session()->flush();
         return redirect('/'); 
+    }
+
+    public function home(){
+        $user = \Auth::user();
+        $trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+        $trip_data = TripData::whereIn('id', $trip_id_arr)
+                    ->where('is_delete', 0)
+                    ->take(5)
+                    ->get([ 'trip_name', 'final_expanse' ]); // Specify both columns you want
+        // Extract both columns into separate arrays
+        $trip_names = $trip_data->pluck('trip_name')->toArray();
+        $final_expanse_values = $trip_data->pluck('final_expanse')->toArray();
+        $values = $final_expanse_values;  // Dynamic data for the chart (values)
+        $labels =  $trip_names;  // Labels for the chart
+        if(count($values) == 0){
+            $values = ['100'];  // Dynamic data for the chart (values)
+            $labels = ['Lets Start your trip'];  
+        }
+        // Return the view and pass dynamic data to the view
+        return view('User.home', compact('values', 'labels'));
     }
 }
 

@@ -131,7 +131,7 @@ class RoadMapController extends Controller
     public function trip_roadmap_detail(Request $request){
         $trip_id = $request->id;
         $roadmap_data = RoadMapData::where('trip_id' , $trip_id)->get();
-        return view('RoadMap.trip_roadmap_detail' , ['roadmap_data' => $roadmap_data]);
+        return view('RoadMap.trip_roadmap_detail' , ['roadmap_data' => $roadmap_data , 'trip_id' => $trip_id]);
     }
     
 }
