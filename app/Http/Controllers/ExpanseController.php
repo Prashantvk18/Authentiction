@@ -111,6 +111,7 @@ class ExpanseController extends Controller
         $user = \Auth::User();
         // $trip_id = UserData::where('user_name', $user->uname)->pluck('trip_id')->toArray();
         $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
+        $trip_name = $is_delete->trip_name;
          $trip_data = UserData::where('trip_id' , $id)->where('request' , 'A')->pluck('uname')->toArray();
          $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
          if(($user->id == $trip_user || in_array( $user->uname , $trip_data)) && $is_delete){
@@ -120,7 +121,7 @@ class ExpanseController extends Controller
                 $is_admin = 1;
             }
            $expanse_data = ExpanseData::where('trip_id', $id)->orderby('date','asc')->get();
-            return view('Expanse.expanse_view',['trip_id' => $id , 'expanse_data' => $expanse_data , 'is_admin' => $is_admin]);
+            return view('Expanse.expanse_view',['trip_id' => $id , 'expanse_data' => $expanse_data , 'is_admin' => $is_admin , 'trip_name' => $trip_name]);
         }else{
             return redirect()->route('expanse')->with('error', 'You are not authorized to view this page.');
         }  
@@ -258,6 +259,7 @@ class ExpanseController extends Controller
         $user = \Auth::User();
        // $trip_id = UserData::where('user_name', $user->uname)->pluck('trip_id')->toArray();
        $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
+       $trip_name = $is_delete->trip_name;
         $trip_data = UserData::where('trip_id' , $id)->pluck('uname')->toArray();
         $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
         if(($user->id == $trip_user || in_array( $user->uname , $trip_data)) && $is_delete){
@@ -268,7 +270,7 @@ class ExpanseController extends Controller
             }
             $user_data = UserData::where('trip_id', $id)->where('request', 'A')->paginate(10);
             $user_pend_data = UserData::where('trip_id', $id)->where('request', 'P')->paginate(10);
-            return view('Expanse.user_view',['trip_id' => $id , 'user_data' => $user_data ,'user_pend_data' => $user_pend_data , 'is_admin' => $is_admin]);
+            return view('Expanse.user_view',['trip_id' => $id , 'user_data' => $user_data ,'user_pend_data' => $user_pend_data , 'is_admin' => $is_admin ,'trip_name'=>$trip_name]);
         }else{
             return redirect()->route('expanse')->with('error', 'You are not authorized to view this page.');
         }   

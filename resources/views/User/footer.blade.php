@@ -11,6 +11,7 @@
 }
 
 .footer-content {
+    
     max-width: 600px; /* Ensures content does not stretch too wide on large screens */
     margin: 0 auto;
 }
@@ -39,10 +40,19 @@
 
 </style>
 <br><br>
+
 <footer>
-    <div class="footer-content">
-        <p>Developed by <strong>Virat Kohli</strong></p>
-        <p>Contact: <a href="prashantjainvk18@gmail.com">prashantjainvk18@gmail.com</a></p>
+<div class="container">
+        <main>
+            <!-- Your main content goes here -->
+        </main>
+
+        <footer>
+            <div class="footer-content">
+                <p>Developed by <strong>Virat Kohli</strong></p>
+                <p>Contact: <a href="mailto:prashantjainvk18@gmail.com">prashantjainvk18@gmail.com</a></p>
+            </div>
+        </footer>
     </div>
 </footer>
 

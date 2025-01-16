@@ -52,18 +52,19 @@
             <p id="msg_success" ></p>
         </div>
 <div class="container">
-    @if($is_admin == 1)
-        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_split_formdata(0,0,{{$trip_id}})">Split Contro</button>
-        <br><br>
-    @endif
+<h4><strong>{{$trip_name}}</strong></h4>
+    
 
     <div class="tabs">
         <div class="tab-button active-tab" onclick="showTab(0)">Present User</div>
+        @if($is_admin == 1)
         <div class="tab-button" onclick="showTab(1)">User's Request ({{count($user_pend_data)}})</div>
+        @endif
     </div>
 
   <div class="tab-content active-content">
   <div class="table-responsive">
+
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -119,12 +120,16 @@
                     <td></td>
             </tfoot>
         </table>
+        @if($is_admin == 1)
+        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_split_formdata(0,0,{{$trip_id}})">Split Contro</button>
+    @endif
         <form action="{{url('export_user_pdf')}}" method = "get" class="d-inline-block mr-2">
             <input value="{{$trip_id}}" style="display:none" name="tid">
             <button type="submit" class="btn btn-success btn-sm" vaue="1" >Generate Pdf</button>   
         </form>
     </div>
   </div>
+  @if($is_admin == 1)
   <div class="tab-content">
 
   <div class="table-responsive">
@@ -166,6 +171,7 @@
         @endif  
   </div>
 </div>
+@endif
 
     
 </div>

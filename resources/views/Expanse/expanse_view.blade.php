@@ -18,6 +18,7 @@
             <p id="msg_success" ></p>
         </div>
     <div class="container">
+        <h4><strong>{{$trip_name}}</strong></h4>
     @if($is_admin == '1')
         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal" onclick="get_formdata(0,0,0,{{$trip_id}})">Add Expanse
         </button>
