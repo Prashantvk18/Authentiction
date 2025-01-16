@@ -13,14 +13,17 @@
         value="@if($edit > 0) {{$user_data->user_name}} @endif">
         <span class="text-danger" id="error_user_name"></span>
     </div>
-    <div class="form-group"> 
-        <label for="mobile_no">Mobile no:</labeL>    
-        <input type="text"  name="mobile_no" class="form-control" placeholder="Mobile no:" value="@if($edit > 0) {{$user_data->mobile_no}} @endif" maxlength="10">
-    </div>
 	<div class="form-group"> 
         <label for="can_edit">Admin</labeL>    
         <input type="checkbox" name="can_edit" @if($edit > 0 )@if($user_data->is_admin == 1) checked @endif @endif >
     </div>
+    <div class="form-group"> 
+        <label for="remove">Remove</labeL>    
+        <input type="checkbox" name="can_remove" >
+    </div>
+    @if($edit == 0)
+    <p>By adding user from here User won't able to see the exapnse</p>
+    @endif
     @if($view == 0)
 				<div class="from-group">
 						<button class="form-control btn-success mt-5 btn-sm" onclick="update_submit();">Submit</button>

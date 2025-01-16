@@ -1,0 +1,7 @@
+-login page
+-register page
+-change mobile no columm into uname in user table and in user_data table
+-add new column in trip_data table name trip_no (ALTER TABLE `trip_data` ADD `trip_uno` VARCHAR(255) NULL DEFAULT NULL AFTER `id`;)
+-expasnse controller(replace all mobile_no with uname)
+-authentication controller(replace all mobile_no with uname)
+-user_request_model created

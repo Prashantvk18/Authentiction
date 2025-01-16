@@ -14,7 +14,7 @@ class RoadMapController extends Controller
         $user = \Auth::user();
         $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
         $created_by = TripData::where('id',$id)->pluck('created_by')->first();
-        $trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+        $trip_id_arr = UserData::where('uname', $user->uname)->pluck('trip_id')->toArray();
         if(($user->id == $created_by || in_array($id , $trip_id_arr)) && $is_delete) {
            return true;
         }
@@ -23,7 +23,7 @@ class RoadMapController extends Controller
 
     public function is_admin($trip_id){
         $user = \Auth::user();
-        $admin_status = UserData::where('trip_id' , $trip_id)->where('mobile_no' , $user->mobile_no)->first();
+        $admin_status = UserData::where('trip_id' , $trip_id)->where('uname' , $user->uname)->first();
         $created_by = TripData::where('id' , $trip_id)->where('is_delete' , 0)->pluck('created_by')->first();
         
         if($admin_status->is_admin == 1 or $created_by == $user->id){

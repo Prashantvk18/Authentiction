@@ -17,9 +17,9 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="mobile_no">Mobile Number:</label>
-                            <input type="mobile_no" id="mobile_no" name="mobile_no" class="form-control" value="{{ old('mobile_no') }}">
-                            <span id="error-mobile_no" class="text-danger"></span>
+                            <label for="user_name">Create Unique Name</label>
+                            <input type="user_name" id="user_name" name="user_name" class="form-control" value="{{ old('user_name') }}">
+                            <span id="error-user_name" class="text-danger"></span>
                         </div>
                         
                         
@@ -135,10 +135,10 @@ $(document).ready(function() {
 		window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha_container');
 		recaptchaVerifier.render();
 	}
-    
+    /*
     function send_otp() {
             
-			var number = "+91"+$("#mobile_no").val();
+			var number = "+91"+$("#user_name").val();
             console.log(number);
 			firebase.auth().signInWithPhoneNumber(number , window.recaptchaVerifier).then(function (confirmationResult){
 				window.confirmationResult = confirmationResult;
@@ -152,7 +152,7 @@ $(document).ready(function() {
 			});
 
 		
-		}
+		}*/
 
   
 

@@ -25,7 +25,7 @@ class AuthenticationController extends Controller
     //User Log in 
     public function login_user(Request $request){
         $request->validate([
-            'mobile_no' => 'required',
+            'uname' => 'required',
             'password' => 'required'
         ]);
         // $last =  Session::get('last_loggedin');
@@ -48,11 +48,12 @@ class AuthenticationController extends Controller
         // }
 
         
-        if(\Auth::attempt($request->only('mobile_no','password'))){
+        if(\Auth::attempt($request->only('uname','password'))){
             $user = \Auth::user();
             Session::put('user_name' , $user->name);
             Session::put('is_admin' , $user->is_admin);
-            return view('User.home');        
+            
+            return redirect('/home');        
         }
         return redirect('/')->withError('Invalid Credential');
     }
@@ -62,7 +63,7 @@ class AuthenticationController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'password' => 'required',
-            'mobile_no' => 'required',
+            'user_name' => 'required|unique:users,user_name|max:255', 
             'confirmed_password' => 'required|same:password',
             //'otp' => 'required'
         ]);
@@ -71,7 +72,7 @@ class AuthenticationController extends Controller
         }
         $users = new User();
         $users->name = $request->name;
-        $users->mobile_no = $request->mobile_no;
+        $users->uname = $request->user_name;
         $users->password = \Hash::make($request->password);
         $users->is_active = 1;
         $users->save();
@@ -94,22 +95,26 @@ class AuthenticationController extends Controller
 
     public function home(){
         $user = \Auth::user();
-        $trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+        $trip_id_arr = UserData::where('uname', $user->uname)->where('request' , 'A')->pluck('trip_id')->toArray();
         $trip_data = TripData::whereIn('id', $trip_id_arr)
                     ->where('is_delete', 0)
                     ->take(5)
-                    ->get([ 'trip_name', 'final_expanse' ]); // Specify both columns you want
+                    ->get([ 'id' ,'trip_name', 'final_expanse' ]); // Specify both columns you want
         // Extract both columns into separate arrays
         $trip_names = $trip_data->pluck('trip_name')->toArray();
-        $final_expanse_values = $trip_data->pluck('final_expanse')->toArray();
+        $final_expanse_values = $trip_data->pluck('final_expanse')->toArray();  
         $values = $final_expanse_values;  // Dynamic data for the chart (values)
         $labels =  $trip_names;  // Labels for the chart
         if(count($values) == 0){
             $values = ['100'];  // Dynamic data for the chart (values)
             $labels = ['Lets Start your trip'];  
         }
+        $trip_id = $trip_data->pluck('id')->toArray();
+        $user_exp = UserData::where('uname', $user->uname)->whereIn('trip_id' , $trip_id)->where('request' , 'A')->pluck('total_balance')->toArray();
+        //print_r($trip_id);print_r($user_exp); die;
+
         // Return the view and pass dynamic data to the view
-        return view('User.home', compact('values', 'labels'));
+        return view('User.home', compact('values', 'labels') , ['labels1' =>  $trip_names , 'dataset1' => $final_expanse_values , 'dataset2' => $user_exp]);
     }
 }
 

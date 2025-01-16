@@ -7,13 +7,14 @@ use App\Models\TripData;
 use App\Models\UserData;
 use App\Models\UserContro;
 use App\Models\ExpanseData;
+use App\Models\User;
 class ExpanseController extends Controller
 {
     //
     public function admin_permission($id){
         $user = \Auth::user();
         $created_by = TripData::where('id',$id)->pluck('created_by')->first();
-        $trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+        $trip_id_arr = UserData::where('uname', $user->uname)->where('request' , 'A')->pluck('trip_id')->toArray();
         if($user->id == $created_by || in_array($id , $trip_id_arr)) {
            return true;
         }
@@ -21,8 +22,8 @@ class ExpanseController extends Controller
     }
     function expanse(){
         $user = \Auth::user();
-        $trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
-        $admin_trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->where('is_admin' , '1')->pluck('trip_id')->toArray();
+        $trip_id_arr = UserData::where('uname', $user->uname)->where('request' , 'A')->pluck('trip_id')->toArray();
+        $admin_trip_id_arr = UserData::where('uname', $user->uname)->where('is_admin' , '1')->pluck('trip_id')->toArray();
         $trip_data = TripData::where('created_by', $user->id)
         ->orWhereIn('id', $trip_id_arr)
         ->orderBy('created_by', 'desc')
@@ -43,7 +44,20 @@ class ExpanseController extends Controller
         return response()->json(['error' => 'Something went wrong'],400);
         
     }
-
+    public function get_trip_uno(){
+        $count = 0;
+        $result =  rand(10000, 999999);
+        $is_present = TripData::where('trip_uno' , $result)->get();
+        if(count($is_present) > 0){
+            $count++;
+            if($count > 10){
+                $result =  rand(10000, 9999999);
+                return $result;
+            }
+            $this->get_trip_uno();
+       }
+       return $result;
+    }
     public function trip_save(Request $request) {
         $user = \Auth::user();
         $rules = [
@@ -56,7 +70,8 @@ class ExpanseController extends Controller
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 400);
         }
-        $trip_data = new TripData();
+        $trip_data = new TripData();    
+        
         if(isset($request->edit) && $request->edit > 0){
             $permission = $this->admin_permission($request->edit);
             if($permission){
@@ -67,6 +82,8 @@ class ExpanseController extends Controller
             }
             
         }else{
+            $trip_uno = $this->get_trip_uno();
+            $trip_data->trip_uno = $trip_uno;
             $trip_data->created_by = $user->id;
         }
         $trip_data->trip_name = $request->Trip_name;
@@ -92,12 +109,12 @@ class ExpanseController extends Controller
 
     public function expanse_view($id , $created_by){
         $user = \Auth::User();
-        // $trip_id = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+        // $trip_id = UserData::where('user_name', $user->uname)->pluck('trip_id')->toArray();
         $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
-         $trip_data = UserData::where('trip_id' , $id)->pluck('mobile_no')->toArray();
+         $trip_data = UserData::where('trip_id' , $id)->where('request' , 'A')->pluck('uname')->toArray();
          $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
-         if(($user->id == $trip_user || in_array( $user->mobile_no , $trip_data)) && $is_delete){
-            $is_admin = UserData::where('mobile_no', $user->mobile_no)->where('trip_id' , $id)->pluck('is_admin')->first(); 
+         if(($user->id == $trip_user || in_array( $user->uname , $trip_data)) && $is_delete){
+            $is_admin = UserData::where('uname', $user->uname)->where('trip_id' , $id)->pluck('is_admin')->first(); 
            // $user_data = UserData::where('trip_id', $id)->get();
             if($user->id ==  $trip_user ){
                 $is_admin = 1;
@@ -125,7 +142,7 @@ class ExpanseController extends Controller
             $expanse_data_user_arr = $expanse_data->user_id != null ? explode(",", $expanse_data->user_id) : [];
 
         }
-        $user_data = UserData::where('trip_id',$trip_id)->orderBy('user_name', 'asc')->get();
+        $user_data = UserData::where('trip_id',$trip_id)->orderBy('uname', 'asc')->get();
         return response()->json(
             ['data' => view('Expanse.expanse_model',['edit' => $edit , 'view' => $view, 'trip_id' =>$trip_id , 'user_data' => $user_data,'expanse_data'=>$expanse_data , 'exp_user_array' => $expanse_data_user_arr])->render()]);
         }
@@ -239,18 +256,19 @@ class ExpanseController extends Controller
 
     public function user_view($id , $created_by){
         $user = \Auth::User();
-       // $trip_id = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+       // $trip_id = UserData::where('user_name', $user->uname)->pluck('trip_id')->toArray();
        $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
-        $trip_data = UserData::where('trip_id' , $id)->pluck('mobile_no')->toArray();
+        $trip_data = UserData::where('trip_id' , $id)->pluck('uname')->toArray();
         $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
-        if(($user->id == $trip_user || in_array( $user->mobile_no , $trip_data)) && $is_delete){
-            $is_admin = UserData::where('mobile_no', $user->mobile_no)->where('trip_id' , $id)->pluck('is_admin')->first(); 
+        if(($user->id == $trip_user || in_array( $user->uname , $trip_data)) && $is_delete){
+            $is_admin = UserData::where('uname', $user->uname)->where('trip_id' , $id)->pluck('is_admin')->first(); 
            // $user_data = UserData::where('trip_id', $id)->get();
             if($user->id == $trip_user ){
                 $is_admin = 1;
             }
-            $user_data = UserData::where('trip_id', $id)->paginate(10);
-            return view('Expanse.user_view',['trip_id' => $id , 'user_data' => $user_data , 'is_admin' => $is_admin]);
+            $user_data = UserData::where('trip_id', $id)->where('request', 'A')->paginate(10);
+            $user_pend_data = UserData::where('trip_id', $id)->where('request', 'P')->paginate(10);
+            return view('Expanse.user_view',['trip_id' => $id , 'user_data' => $user_data ,'user_pend_data' => $user_pend_data , 'is_admin' => $is_admin]);
         }else{
             return redirect()->route('expanse')->with('error', 'You are not authorized to view this page.');
         }   
@@ -273,29 +291,35 @@ class ExpanseController extends Controller
     public function user_save(Request $request){
         //print_r($request->all());die;
         $user = \Auth::user();
-        $rules = [
-            'user_name' => 'required|string|max:255',
-        ];
-
-        // Validate the request
-        $validator = Validator::make($request->all(), $rules);
+     
 
         // Check if validation fails
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 400);
-        }
+        
         $user_data = new UserData();
         if(isset($request->edit) && $request->edit > 0){
+            $rules = [
+                'user_name' => 'required|string|max:255',
+            ];
+    
+            // Validate the request
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['errors' => $validator->errors()], 400);
+            }
             $user_data = UserData::where('id', $request->edit)->first();
             $user_data->update_by = $user->id;
+            $user_data->user_name =   $request->user_name;
+            $user_data->request = isset($request->can_remove)? 'P' : 'A';
         }else{
             $user_data->added_by = $user->id;
+            $user_data->uname = $user->uname;
+            $user_data->user_name =   $user->name;
+            $user_data->request = 'P';
             $user_data->add_date = date('Y-m-d');
         }
         $user_data->trip_id = $request->trip_id;
-        $user_data->user_name = $request->user_name;
-        $user_data->mobile_no = $request->mobile_no;
         $user_data->is_admin = isset($request->can_edit)? 1 : 0;
+        
         $user_data->save();
         return response()->json(['message' => 'Form submitted successfully']);
         
@@ -309,7 +333,7 @@ class ExpanseController extends Controller
         $trip_id = $_GET['trip_id'];
         $permission = $this->admin_permission($trip_id);
         if($permission){
-            $is_admin = UserData::where('mobile_no',$user->mobile_no)->pluck('is_admin')->first();
+            $is_admin = UserData::where('uname',$user->uname)->pluck('is_admin')->first();
         
             $user_contro = '';
             $user_data = [];
@@ -518,5 +542,47 @@ class ExpanseController extends Controller
 
         return response()->json(['message' => 'Form submitted successfully']);
 
+    }
+
+    public function user_trip_request(Request $request){
+        $user = \Auth::user();
+        $rules = [
+            'trip_uno' => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json(['errors' =>'Trip Number is required'], 400);
+        }
+        $trip_data = TripData::where('trip_uno',$request->trip_uno)->where('is_delete',0)->first();
+        
+        if($trip_data){
+            $is_present = UserData::where('trip_id' , $trip_data->id)->where('uname' , $user->uname)->first();
+            if($is_present->request == 'A'){
+                return response()->json(['errors' =>'You are already added'], 400);
+            }elseif($is_present->request == 'P'){
+                return response()->json(['errors' =>'Request Not Accept Yet'], 400); 
+            }
+            $trip_creator_name = User::where('id' , $trip_data->created_by)->pluck('name')->first();
+            return response()->json(
+                ['data' => view('Expanse.user_request_model',['trip_data_all' => $trip_data , 'trip_creator_name' => $trip_creator_name])->render()]);
+        }
+        return response()->json(['errors' =>'No Trip Found'], 400);
+        
+    } 
+
+    public function acceptAll(Request $request){
+        if($request->id == 0){
+            UserData::whereIn('id', $request->user_ids)
+                    ->update(['request' => 'A']);
+        return response()->json(['message' => "Request accepted successfully"]);
+        }
+
+        UserData::where('id', $request->id)
+                    ->update(['request' => 'A']);
+        
+        return response()->json(['message' => "Request accepted successfully"]);
+        
     }
 }

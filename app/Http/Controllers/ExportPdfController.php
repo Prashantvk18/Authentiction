@@ -16,7 +16,7 @@ class ExportPdfController extends Controller
         $user = \Auth::user();
         $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
         $created_by = TripData::where('id',$id)->pluck('created_by')->first();
-        $trip_id_arr = UserData::where('mobile_no', $user->mobile_no)->pluck('trip_id')->toArray();
+        $trip_id_arr = UserData::where('uname', $user->uname)->pluck('trip_id')->toArray();
         if(($user->id == $created_by || in_array($id , $trip_id_arr)) && $is_delete) {
            return true;
         }
@@ -362,7 +362,6 @@ class ExportPdfController extends Controller
                     <tr>
                     <th style="width: 50px;">Sr. No.</th>
                     <th>User Name</th>
-                    <th>Mobile No.</th>
                     <th>Total Contro</th>
                     <th>Total Expanse</th>
                     <th>Balance</th>
@@ -384,7 +383,6 @@ class ExportPdfController extends Controller
                 <tr>
                     <td style="line-height: 15px; width: 50px;">' . $count . '</td>
                     <td style="line-height: 15px;">' . htmlspecialchars($data->user_name) . '</td>
-                    <td style="line-height: 15px;">' . htmlspecialchars($data->mobile_no) . '</td>
                     <td style="line-height: 15px;">' . htmlspecialchars($data->total_contro) . '</td>
                     <td style="line-height: 15px;">' . htmlspecialchars($data->total_balance) . '</td>
                     <td style="line-height: 15px;">' . htmlspecialchars($data->total_contro - $data->total_balance) . '</td>

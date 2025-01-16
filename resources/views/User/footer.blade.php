@@ -4,7 +4,7 @@
     color: white;
     text-align: center;
     padding: 20px;
-    position: fixed;
+    position: relative ;
     bottom: 0;
     width: 100%;
     font-family: Arial, sans-serif;

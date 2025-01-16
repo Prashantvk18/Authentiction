@@ -32,6 +32,7 @@
                 <tr>
                     <th>Sr. No.</th>
                     <th style="width:150px;">Trip Name</th>
+                    <th>Trip No.</th>
                     <th>Total Expanse</th>
                     <th>Start Date</th>
                     <th>End Date</th>
@@ -45,6 +46,7 @@
                         <tr>
                             <td>{{$trip_data->firstItem() + $srno }}</td>
                             <td>{{$data->trip_name}}</td>
+                            <td>{{$data->trip_uno}}</td>
                             <td>{{$data->final_expanse}}</td>
                             <td>{{$data->start_date}}</td>
                             <td>{{$data->End_date}}</td>
@@ -75,6 +77,7 @@
 
 <script>
     function get_formdata(edit=0,view=0,deletes=0) {       
+        event.preventDefault();
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('trip_id')->nullable();
             $table->string('user_name')->nullable();
-            $table->string('mobile_no')->nullable();
+            $table->string('uname')->nullable();
             $table->string('total_contro')->default(0);
             $table->string('total_balance')->default(0);
             $table->date('add_date')->nullable();
