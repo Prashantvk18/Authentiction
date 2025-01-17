@@ -561,9 +561,10 @@ class ExpanseController extends Controller
         
         if($trip_data){
             $is_present = UserData::where('trip_id' , $trip_data->id)->where('uname' , $user->uname)->first();
-            if($is_present->request == 'A'){
+         
+            if($is_present && $is_present->request == 'A'){
                 return response()->json(['errors' =>'You are already added'], 400);
-            }elseif($is_present->request == 'P'){
+            }elseif($is_present && $is_present->request == 'P'){
                 return response()->json(['errors' =>'Request Not Accept Yet'], 400); 
             }
             $trip_creator_name = User::where('id' , $trip_data->created_by)->pluck('name')->first();

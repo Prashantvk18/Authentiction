@@ -1,14 +1,32 @@
 <style>
-  footer {
+/* Ensure html and body take full height of the viewport */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Flexbox layout for the body */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;  /* Ensures footer is pushed to the bottom */
+}
+
+/* Content area, so it expands and pushes footer down */
+.content {
+    flex-grow: 1;
+}
+
+/* Footer styling */
+footer {
     background-color: #333;
     color: white;
     text-align: center;
     padding: 20px;
-    position: relative ;
-    bottom: 0;
     width: 100%;
     font-family: Arial, sans-serif;
 }
+
 
 .footer-content {
     
@@ -40,13 +58,8 @@
 
 </style>
 <br><br>
-
+</div>
 <footer>
-<div class="container">
-        <main>
-            <!-- Your main content goes here -->
-        </main>
-
         <footer>
             <div class="footer-content">
                 <p>Developed by <strong>Virat Kohli</strong></p>

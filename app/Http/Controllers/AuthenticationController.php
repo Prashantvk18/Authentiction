@@ -62,8 +62,17 @@ class AuthenticationController extends Controller
     public function save_register(Request $request){
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'password' => 'required',
-            'user_name' => 'required|unique:users,user_name|max:255', 
+            'password' => [
+                'required', // Password is required
+                'string', // It should be a string
+                'min:8', // Minimum length of 8 characters
+                'max:255', // Maximum length of 255 characters
+                'regex:/[A-Z]/', // At least one uppercase letter
+                'regex:/[a-z]/', // At least one lowercase letter
+                'regex:/[0-9]/', // At least one number
+                'regex:/[@$!%*?&]/', // At least one special character
+            ],
+            'user_name' => 'required|unique:users,uname|max:255', 
             'confirmed_password' => 'required|same:password',
             //'otp' => 'required'
         ]);

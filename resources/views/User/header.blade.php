@@ -39,7 +39,7 @@
    
 </head>
 <body> 
-
+<div class="content">
 <nav class="navbar navbar-expand-lg navbar-dark  shadow-sm">
     <div class="container-fluid">
         <a class="navbar-brand fs-3 fw-bold" href="#">Hello {{ Str::words(Session::get('user_name'),2, '...')}}</a>

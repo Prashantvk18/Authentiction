@@ -23,7 +23,7 @@
 @endif
 
 <div class="container">
-    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata()">Add Trip</button>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="get_formdata()">Create Trip</button>
     <br><br>
     <!-- Table wrapped in a responsive div -->
     <div class="table-responsive">

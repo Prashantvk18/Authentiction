@@ -196,12 +196,16 @@ $(document).ready(function() {
                             // Handle success (e.g., update UI, display message)
                         },
                         error: function(error) {
-                        console.log(error);
+                        
                             Object.keys(error.responseJSON.errors).forEach(field => {
                                 console.log(field);
-                                const errorMessage = error.responseJSON.errors[field][0];
+                                var errorMessage = error.responseJSON.errors[field][0];
                                 console.log(errorMessage);
+                                if(field == 'password'){
+                                    errorMessage =errorMessage + ' eg. Abcd#@123';
+                                }
                                 document.getElementById('error-' + field).innerHTML = errorMessage;
+                                
                         });
                             
                         // alert(error.message);
