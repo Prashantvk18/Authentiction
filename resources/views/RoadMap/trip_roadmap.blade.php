@@ -19,16 +19,26 @@
                 <tr>
                     <th></th>
                     <th>Trip Name</th>
-                    <th></th>
+                    <th>Days</th>
                 </tr>
             </thead>
             <tbody>
                 <?php $srno = 1 ?>
                 @foreach($trip_data as $data)
+                <?php 
+                  $fromDate = "$data->start_date";
+                  $toDate = "$data->End_date";
+                  
+                  // Create DateTime objects from the string dates
+                  $from = new DateTime($fromDate);
+                  $to = new DateTime($toDate);
+                 
+                    $interval = $from->diff($to);
+                ?>
                     <tr>
                         <td></td>
                         <td><a href ="{{route('trip_roadmap_detail', ['id' => $data->id])}}" ><i style="color:black">{{$data->trip_name}}</i></a></td>
-                        <td></td>
+                        <td>{{$interval->format('%d days')}}</td>
                     </tr>
                     <?php $srno++ ?>
                 @endforeach

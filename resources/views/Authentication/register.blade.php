@@ -27,6 +27,12 @@
                             <label for="password">Password:</label>
                             <input type="password" name="password" class="form-control">
                             <span id="error-password" class="text-danger"></span>
+                            <ul   id="pass_error" style="display:none; color:#de4040">
+                                <li id="length" class="error">At least 8 characters</li>
+                                <li id="uppercase" class="error">At least one uppercase letter</li>
+                                <li id="number" class="error">At least one number</li>
+                                <li id="special" class="error">At least one special character (@, #, $, etc.)</li>
+                            </ul>
                         </div>
                         <div class="form-group">
                             <label for="confirmed_password">Confirm Password:</label>
@@ -202,7 +208,8 @@ $(document).ready(function() {
                                 var errorMessage = error.responseJSON.errors[field][0];
                                 console.log(errorMessage);
                                 if(field == 'password'){
-                                    errorMessage =errorMessage + ' eg. Abcd#@123';
+                                   // errorMessage =errorMessage + ' eg. Abcd#@123';
+                                    $("#pass_error").css('display' , '');
                                 }
                                 document.getElementById('error-' + field).innerHTML = errorMessage;
                                 

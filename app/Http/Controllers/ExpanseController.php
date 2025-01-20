@@ -23,7 +23,7 @@ class ExpanseController extends Controller
     function expanse(){
         $user = \Auth::user();
         $trip_id_arr = UserData::where('uname', $user->uname)->where('request' , 'A')->pluck('trip_id')->toArray();
-        $admin_trip_id_arr = UserData::where('uname', $user->uname)->where('is_admin' , '1')->pluck('trip_id')->toArray();
+        $admin_trip_id_arr = UserData::where('uname', $user->uname)->where('is_admin' , '1')->where('request' , 'A')->pluck('trip_id')->toArray();
         $trip_data = TripData::where('created_by', $user->id)
         ->orWhereIn('id', $trip_id_arr)
         ->orderBy('created_by', 'desc')
@@ -115,7 +115,7 @@ class ExpanseController extends Controller
          $trip_data = UserData::where('trip_id' , $id)->where('request' , 'A')->pluck('uname')->toArray();
          $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
          if(($user->id == $trip_user || in_array( $user->uname , $trip_data)) && $is_delete){
-            $is_admin = UserData::where('uname', $user->uname)->where('trip_id' , $id)->pluck('is_admin')->first(); 
+            $is_admin = UserData::where('uname', $user->uname)->where('trip_id' , $id)->where('request' , 'A')->pluck('is_admin')->first(); 
            // $user_data = UserData::where('trip_id', $id)->get();
             if($user->id ==  $trip_user ){
                 $is_admin = 1;
@@ -143,7 +143,7 @@ class ExpanseController extends Controller
             $expanse_data_user_arr = $expanse_data->user_id != null ? explode(",", $expanse_data->user_id) : [];
 
         }
-        $user_data = UserData::where('trip_id',$trip_id)->orderBy('uname', 'asc')->get();
+        $user_data = UserData::where('trip_id',$trip_id)->where('request' , 'A')->orderBy('uname', 'asc')->get();
         return response()->json(
             ['data' => view('Expanse.expanse_model',['edit' => $edit , 'view' => $view, 'trip_id' =>$trip_id , 'user_data' => $user_data,'expanse_data'=>$expanse_data , 'exp_user_array' => $expanse_data_user_arr])->render()]);
         }
@@ -213,7 +213,7 @@ class ExpanseController extends Controller
         $permission = $this->admin_permission($request->trip_id);
         if($permission){
         $expanse_data = ExpanseData::where('trip_id',$request->trip_id)->get();
-        $user_data = UserData::where('trip_id' , $request->trip_id)->get();
+        $user_data = UserData::where('trip_id' , $request->trip_id)->where('request' , 'A')->get();
         $final_expanses = 0;
         $user_array=[];
         foreach ($user_data as $data1) {
@@ -260,10 +260,10 @@ class ExpanseController extends Controller
        // $trip_id = UserData::where('user_name', $user->uname)->pluck('trip_id')->toArray();
        $is_delete  = TripData::where('id' , $id)->where('is_delete' , 0)->first();
        $trip_name = $is_delete->trip_name;
-        $trip_data = UserData::where('trip_id' , $id)->pluck('uname')->toArray();
+        $trip_data = UserData::where('trip_id' , $id)->where('request' , 'A')->pluck('uname')->toArray();
         $trip_user = TripData::where('id',$id)->pluck('created_by')->first();
         if(($user->id == $trip_user || in_array( $user->uname , $trip_data)) && $is_delete){
-            $is_admin = UserData::where('uname', $user->uname)->where('trip_id' , $id)->pluck('is_admin')->first(); 
+            $is_admin = UserData::where('uname', $user->uname)->where('request' , 'A')->where('trip_id' , $id)->pluck('is_admin')->first(); 
            // $user_data = UserData::where('trip_id', $id)->get();
             if($user->id == $trip_user ){
                 $is_admin = 1;
@@ -280,7 +280,7 @@ class ExpanseController extends Controller
         $edit = $_GET['edit'];
         $view = $_GET['view'];
         $trip_id = $_GET['trip_id'];
-        $user_data = UserData::where('id',$edit)->first();
+        $user_data = UserData::where('id',$edit)->where('request' , 'A')->first();
         $permission = $this->admin_permission($trip_id);
         if($permission || !$user_data){
         return response()->json(
@@ -308,7 +308,7 @@ class ExpanseController extends Controller
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
-            $user_data = UserData::where('id', $request->edit)->first();
+            $user_data = UserData::where('id', $request->edit)->where('request' , 'A')->first();
             $user_data->update_by = $user->id;
             $user_data->user_name =   $request->user_name;
             $user_data->request = isset($request->can_remove)? 'P' : 'A';
@@ -335,7 +335,7 @@ class ExpanseController extends Controller
         $trip_id = $_GET['trip_id'];
         $permission = $this->admin_permission($trip_id);
         if($permission){
-            $is_admin = UserData::where('uname',$user->uname)->pluck('is_admin')->first();
+            $is_admin = UserData::where('uname',$user->uname)->where('request' , 'A')->pluck('is_admin')->first();
         
             $user_contro = '';
             $user_data = [];
@@ -391,7 +391,7 @@ class ExpanseController extends Controller
         ->sum('contro_amount');
 
         $user_total_contro = $user_total_contro -  $user_split_total_contro;
-        $user_contro_data = UserData::where('id',$request->edit)->where('trip_id',$request->trip_id)->first();
+        $user_contro_data = UserData::where('id',$request->edit)->where('trip_id',$request->trip_id)->where('request' , 'A')->first();
 
         $user_contro_data->total_contro = $user_total_contro;
         $user_contro_data->save();
@@ -460,7 +460,7 @@ class ExpanseController extends Controller
         $trip_id = $_GET['trip_id'];
         $permission = $this->admin_permission($trip_id);
         if($permission){
-        $user_data = UserData::where('trip_id',$trip_id)->get();
+        $user_data = UserData::where('trip_id',$trip_id)->where('request' , 'A')->get();
         return response()->json(
             ['data' => view('Expanse.user_split_model',['edit' => $edit , 'view' => $view , 'trip_id' => $trip_id , 'user_data' => $user_data ])->render()]);
         }
