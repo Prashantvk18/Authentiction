@@ -1,5 +1,5 @@
 <form id="trip_data">
-    <H3 class="text-center" style="font-family: 'Times New Roman', Times, serif;">Request To add Me</H3>
+    <H3 class="text-center" style="font-family: 'Times New Roman', Times, serif;">Request To Add Me</H3>
     <!-- Trip Name Section -->
         <div class="form-group mt-5">
         <label for="start_date" class="font-weight-bold">Trip Name:</label> <span class="text-primary">{{$trip_data_all->trip_name}}</span>

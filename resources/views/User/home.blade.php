@@ -1,25 +1,25 @@
 @include('User.header')
 <style>
-        /* Ensure the chart container is responsive */
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px; /* You can adjust this to fit your needs */
-            margin: 0 auto; /* Center the chart */
-            padding: 20px;
-        }
+    /* Ensure the chart container is responsive */
+    .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px; /* You can adjust this to fit your needs */
+        margin: 0 auto; /* Center the chart */
+        padding: 20px;
+    }
 
-        /* Make sure the canvas takes up the full container width */
-        canvas {
-            width: 100% !important;
-            height: auto !important;
-        }
+    /* Make sure the canvas takes up the full container width */
+    canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
 
-        * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
 
 

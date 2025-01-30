@@ -469,7 +469,7 @@ class ExportPdfController extends Controller
             $pdf->writeHTML($html, true, false, true, false, '');
             
             // Output the PDF
-            return $pdf->Output($trip_name->trip_name.'_detail.pdf' ); // 'D' to download the file
+            return $pdf->Output($trip_name->trip_name.'_detail.pdf','D' ); // 'D' to download the file
         }
         
         Die("You are not member of this trip");

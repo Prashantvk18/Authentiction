@@ -19,7 +19,6 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-
                     <div class="form-group">
                         <label for="password" class="font-weight-bold">Password:</label>
                         <input type="password" name="password" class="form-control">
@@ -27,7 +26,6 @@
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
                     </div>
-
                     <!-- Google reCAPTCHA (optional) -->
                     <!-- 
                     <div class="form-group mt-3">
