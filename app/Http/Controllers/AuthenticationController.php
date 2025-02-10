@@ -54,7 +54,7 @@ class AuthenticationController extends Controller
             Session::put('user_name' , $user->name);
             Session::put('is_admin' , $user->is_admin);
             
-            return redirect('/expanse');        
+            return redirect('/home');        
         }
         return redirect('/')->withError('Invalid Credential');
     }

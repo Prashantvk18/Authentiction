@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 use Illuminate\Http\Request;
 
@@ -34,8 +35,18 @@ class ProfileController extends Controller
     }
 
     public function change_pwd(Request $request){
+
+        $user = Auth::user();
+        if($request->uname != ''){
+           $user = User::where('uname' , $request->uname)->first();
+           if(!$user){
+                return response()->json(['errors' => 'User does not exit' , 'status' => '1'] , 400);
+           }
+           $user->is_admin = isset($request->is_admin) ? 1 : 0 ;
+        }
+
+        if($request->password != ''){
         $request->validate([
-            'old_password' => 'required',
             'password' => [
                 'required', // Password is required
                 'string', // It should be a string
@@ -47,16 +58,24 @@ class ProfileController extends Controller
                 'regex:/[@$!%*?&]/', // At least one special character
             ],
         ]);
-    
-        $user = Auth::user();
-      
+        if(!isset($request->uname)){
+            $request->validate([
+                'old_password' => 'required'
+            ]);
+            if(!Hash::check($request->old_password, $user->password)) {
+                return response()->json(['errors' => 'Old password is incorrect.' , 'status' => '2'] , 400);
+            }
+        }
+        $user->password = Hash::make($request->password);
+
+        }
+
         // Check if the current password matches
         
-        if(!Hash::check($request->old_password, $user->password)) {
-            return response()->json(['errors' => 'Old password is incorrect.'] , 400);
-        }
+ 
         // Update the password
-        $user->password = Hash::make($request->password);
+        
+
         $user->save();
     
         return  response()->json(['success' => 'Password updated Successfully.'] , 200);;
