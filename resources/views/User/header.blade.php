@@ -42,7 +42,7 @@
 <div class="content">
 <nav class="navbar navbar-expand-lg navbar-dark  shadow-sm">
     <div class="container-fluid">
-        <a class="navbar-brand fs-3 fw-bold" href="#">Hello {{ Str::words(Session::get('user_name'),2, '...')}}</a>
+        <a class="navbar-brand fs-3 fw-bold" href="/profile_view">Hello {{ Str::words(Session::get('user_name'),2, '...')}}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon" style="background-color: #30536a;"></span>
         </button>

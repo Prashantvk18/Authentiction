@@ -13,7 +13,7 @@
                 <form action="{{ url('/') }}" method="post">
                     @csrf
                     <div class="form-group">
-                        <label for="uname" class="font-weight-bold">User Name</label>
+                        <label for="uname" class="font-weight-bold">Unique Name</label>
                         <input type="text" name="uname" class="form-control" value="{{ old('uname') }}">
                         @error('uname')
                             <span class="text-danger">{{ $message }}</span>

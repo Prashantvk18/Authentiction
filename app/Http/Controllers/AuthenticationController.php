@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\TripData;
 use App\Models\UserData;
+use TCPDF;
 
 class AuthenticationController extends Controller
 {
@@ -53,7 +54,7 @@ class AuthenticationController extends Controller
             Session::put('user_name' , $user->name);
             Session::put('is_admin' , $user->is_admin);
             
-            return redirect('/home');        
+            return redirect('/expanse');        
         }
         return redirect('/')->withError('Invalid Credential');
     }
@@ -85,6 +86,7 @@ class AuthenticationController extends Controller
         $users->password = \Hash::make($request->password);
         $users->is_active = 1;
         $users->save();
+        
         return response()->json(['message' => 'User Created Successfully', 'redirect' => '/']);
         // if(\Auth::attempt($request->only('mobile_no','password'))){
         //     return view('welcome');
@@ -125,6 +127,8 @@ class AuthenticationController extends Controller
         // Return the view and pass dynamic data to the view
         return view('User.home', compact('values', 'labels') , ['labels1' =>  $trip_names , 'dataset1' => $final_expanse_values , 'dataset2' => $user_exp]);
     }
+
+   
 }
 
     
@@ -147,3 +151,4 @@ if(intval($responseKeys["success"]) !== 1) {
 
     echo "Login successful.";
 }*/
+

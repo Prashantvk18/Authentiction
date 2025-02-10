@@ -52,7 +52,7 @@
             <p id="msg_success" ></p>
         </div>
 <div class="container">
-<h4><strong>{{$trip_name}}</strong></h4>
+<h4><strong>{{$trip_name->trip_name}}</strong></h4>
     
 
     <div class="tabs">

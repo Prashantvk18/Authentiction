@@ -9,36 +9,36 @@
                         <p class="text-danger">{{ Session::get('error') }}</p>
                     @endif
                     <span id="success_msg" class="text-success"></span>
-                    <form  id="taskForm">
+                    <form  id="taskForm" >
                         <div class="form-group">
                             <label for="name">User Name:</label>
                             <input type="text" id="name" name="name" class="form-control" value="{{ old('name') }}"  autocomplete="off">
                             <span id="error-name" class="text-danger"></span>
                         </div>
+                            <div class="form-group">
+                                <label for="user_name">Create Unique Name</label>
+                                <input type="user_name" id="user_name" name="user_name" class="form-control" value="@if(isset($_GET['user_name'])){{$_GET['user_name']}}@endif">
+                                <span id="error-user_name" class="text-danger"></span>
+                            </div>
                         
-                        <div class="form-group">
-                            <label for="user_name">Create Unique Name</label>
-                            <input type="user_name" id="user_name" name="user_name" class="form-control" value="{{ old('user_name') }}">
-                            <span id="error-user_name" class="text-danger"></span>
-                        </div>
-                        
-                        
-                        <div class="form-group">
-                            <label for="password">Password:</label>
-                            <input type="password" name="password" class="form-control">
-                            <span id="error-password" class="text-danger"></span>
-                            <ul   id="pass_error" style="display:none; color:#de4040">
-                                <li id="length" class="error">At least 8 characters</li>
-                                <li id="uppercase" class="error">At least one uppercase letter</li>
-                                <li id="number" class="error">At least one number</li>
-                                <li id="special" class="error">At least one special character (@, #, $, etc.)</li>
-                            </ul>
-                        </div>
+                       
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                <input type="password" name="password" class="form-control">
+                                <span id="error-password" class="text-danger"></span>
+                                <ul   id="pass_error" style="display:none; color:#de4040">
+                                    <li id="length" class="error">At least 8 characters</li>
+                                    <li id="uppercase" class="error">At least one uppercase letter</li>
+                                    <li id="number" class="error">At least one number</li>
+                                    <li id="special" class="error">At least one special character (@, #, $, etc.)</li>
+                                </ul>
+                            </div>
                         <div class="form-group">
                             <label for="confirmed_password">Confirm Password:</label>
                             <input type="text" name="confirmed_password" class="form-control">
                             <span id="error-confirmed_password" class="text-danger"></span>
                         </div>
+                        
                         <br>
                         <!---<div id="recaptcha_container"></div>
                         <br>
@@ -113,7 +113,11 @@
 <!-- Include other Firebase modules if needed -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    
+    function downloadPDF() {
+    // Trigger the form submission to download the PDF
+    console.log("Test");
+    window.location.href = "{{ url('user_detail_download') }}"; // This will navigate to the URL that serves the PDF
+    }
    // Your Firebase configuration
    const firebaseConfig = {
     //Here you have to insert your firbase config
@@ -192,11 +196,12 @@ $(document).ready(function() {
                             console.log(response.message);
                             $("#taskForm").css('display', 'none');
                             document.getElementById("success_msg").innerHTML = response.message;
+                            downloadPDF();
                             //$("#image").attr('src' , 'image/welcome.png');
-                            setTimeout(function() {
-                                // Code to execute after the "pause"
-                                window.location.href = response.redirect;
-                            }, 3000);
+                            // setTimeout(function() {
+                            //     // Code to execute after the "pause"
+                            //     window.location.href = response.redirect;
+                            // }, 3000);
                            
                    
                             // Handle success (e.g., update UI, display message)
@@ -206,9 +211,9 @@ $(document).ready(function() {
                             Object.keys(error.responseJSON.errors).forEach(field => {
                                 console.log(field);
                                 var errorMessage = error.responseJSON.errors[field][0];
-                                console.log(errorMessage);
-                                if(field == 'password'){
-                                   // errorMessage =errorMessage + ' eg. Abcd#@123';
+                              //  console.log(errorMessage);
+                               if(field == 'password'){
+                                    errorMessage =errorMessage + ' eg. Abcd#@123';
                                     $("#pass_error").css('display' , '');
                                 }
                                 document.getElementById('error-' + field).innerHTML = errorMessage;

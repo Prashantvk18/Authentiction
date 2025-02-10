@@ -416,6 +416,7 @@ class ExportPdfController extends Controller
     }
 
     public function export_roadmap_pdf(Request $request){
+        
         $trip_id = $request->tid;
         //$uid = $request->uid;
         $permission = $this->admin_permission($trip_id);
@@ -469,10 +470,69 @@ class ExportPdfController extends Controller
             $pdf->writeHTML($html, true, false, true, false, '');
             
             // Output the PDF
-            return $pdf->Output($trip_name->trip_name.'_detail.pdf','D' ); // 'D' to download the file
+            return $pdf->Output($trip_name->trip_name.'_detail.pdf' ); // 'D' to download the file
         }
         
         Die("You are not member of this trip");
+    }
+    public function user_detail_download(Request $request){
+        dd("Test");return false;
+            $date = date('d-m-Y');
+            // Fetch data from database or any other source
+            // $vapt_data = VAPT::all(); // Replace with your actual model and query
+            $pdf = new TCPDF();
+            
+            // Set document information
+            $pdf->SetCreator(PDF_CREATOR);
+            $pdf->SetAuthor('Prashant Jain');
+            $pdf->SetTitle('User Detail');
+            $pdf->SetSubject('PDF Export');
+
+            // Set default header and footer fonts
+            $pdf->setHeaderFont(Array('helvetica', '', 12));
+            $pdf->setFooterFont(Array('helvetica', '', 10));
+
+            // Set margins
+            $pdf->SetMargins(5, 5,5);
+            $pdf->SetHeaderMargin(5);
+            $pdf->SetFooterMargin(5);
+
+            // Set auto page breaks
+            $pdf->SetAutoPageBreak(TRUE, 10);
+
+            // Set font
+            $pdf->SetFont('helvetica', '', 10);
+
+            // Add a page
+            $pdf->AddPage();
+           // $expanse_data = UserContro::where('user_id', $uid)->get();
+       
+            //$user_name = UserData::where('id' , $uid)->first();
+         
+            $html = '
+            <table border="0.5" cellpadding="2" cellspacing="">
+                <thead>
+                    <tr>
+                    <th>User Name</th>
+                    <th>Unique Name</th>
+                    <th>Password</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>' .$request->name . '</td>
+                    <td>' . $request->user_name . '</td>
+                    <td>' . $request->password. '</td>
+                 </tr>
+                </tbody>
+            </table>';
+           
+            // Output the HTML content
+            $pdf->writeHTML($html, true, false, true, false, '');
+           
+            // Output the PDF
+            return $pdf->Output($request->user_name .'_ExpanseControLogin_detail.pdf','D');  // 'D' to download the file
+        
     }
 }
 

@@ -12,6 +12,7 @@ Route::group(['middleware' => 'guest'],function() {
 });
 //After sign in
 Route::group(['middleware' => 'checkedloggedin'],function() {
+    require __DIR__ . '/web_routes/profile_route.php';
     require __DIR__ . '/web_routes/user_router.php';
     require __DIR__ . '/web_routes/ticket_router.php';
     require __DIR__ . '/web_routes/createcsv_router.php';
