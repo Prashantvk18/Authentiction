@@ -48,27 +48,27 @@ class ProfileController extends Controller
         }
 
         if($request->password != ''){
-        $request->validate([
-            'password' => [
-                'required', // Password is required
-                'string', // It should be a string
-                'min:8', // Minimum length of 8 characters
-                'max:255', // Maximum length of 255 characters
-                'regex:/[A-Z]/', // At least one uppercase letter
-                'regex:/[a-z]/', // At least one lowercase letter
-                'regex:/[0-9]/', // At least one number
-                'regex:/[@$!%*?&]/', // At least one special character
-            ],
-        ]);
-        if(!isset($request->uname)){
             $request->validate([
-                'old_password' => 'required'
+                'password' => [
+                    'required', // Password is required
+                    'string', // It should be a string
+                    'min:8', // Minimum length of 8 characters
+                    'max:255', // Maximum length of 255 characters
+                    'regex:/[A-Z]/', // At least one uppercase letter
+                    'regex:/[a-z]/', // At least one lowercase letter
+                    'regex:/[0-9]/', // At least one number
+                    'regex:/[@$!%*?&]/', // At least one special character
+                ],
             ]);
-            if(!Hash::check($request->old_password, $user->password)) {
-                return response()->json(['errors' => 'Old password is incorrect.' , 'status' => '2'] , 400);
+                if(!isset($request->uname)){
+                $request->validate([
+                    'old_password' => 'required'
+                ]);
+                if(!Hash::check($request->old_password, $user->password)) {
+                    return response()->json(['errors' => 'Old password is incorrect.' , 'status' => '2'] , 400);
+                }
             }
-        }
-        $user->password = Hash::make($request->password);
+            $user->password = Hash::make($request->password);
 
         }
 

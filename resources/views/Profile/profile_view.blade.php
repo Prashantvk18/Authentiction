@@ -1,6 +1,10 @@
 @include('User.header')
 
+
 <div class="container">
+<div id="successMessage" class="alert alert-success" style="display: none;">
+    Profile saved successfully!
+</div>
     <h3><b>User Profile</b></h3>
     <div class="card">
         <div class="card-header">
@@ -23,6 +27,9 @@
         </div>
     </div>
     <br>
+    <div id="successMessage1" class="alert alert-success" style="display: none;">
+        Profile saved successfully!
+    </div>
     <div class="card">
         <div class="card-header">
             Change Password
@@ -90,7 +97,9 @@
             data : data,
 
             success: function (response) {
-                location.reload();
+                $('#successMessage').show().delay(3000).fadeOut();
+                $('#profile_save')[0].reset();  // This clears the form fields
+                $('#profile_save').find('input:first').focus(); 
             },
             error : function (response) {
                 console.log(response);
@@ -113,7 +122,9 @@
             data : data,
 
             success: function (response) {
-                location.reload();
+                $('#successMessage1').show().delay(3000).fadeOut();
+                $('#change_pwd')[0].reset();  // This clears the form fields
+                $('#change_pwd').find('input:first').focus(); 
             },
             error : function (response) {
                 console.log(response);
