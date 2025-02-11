@@ -27,9 +27,6 @@
         </div>
     </div>
     <br>
-    <div id="successMessage1" class="alert alert-success" style="display: none;">
-        Profile saved successfully!
-    </div>
     <div class="card">
         <div class="card-header">
             Change Password
@@ -99,7 +96,9 @@
             success: function (response) {
                 $('#successMessage').show().delay(3000).fadeOut();
                 $('#profile_save')[0].reset();  // This clears the form fields
-                $('#profile_save').find('input:first').focus(); 
+                $('html, body').animate({
+                    scrollTop: 20
+                }, 'fast');  
             },
             error : function (response) {
                 console.log(response);
@@ -122,9 +121,11 @@
             data : data,
 
             success: function (response) {
-                $('#successMessage1').show().delay(3000).fadeOut();
+                $('#successMessage').show().delay(3000).fadeOut();
                 $('#change_pwd')[0].reset();  // This clears the form fields
-                $('#change_pwd').find('input:first').focus(); 
+                $('html, body').animate({
+                    scrollTop: 20
+                }, 'fast'); 
             },
             error : function (response) {
                 console.log(response);
