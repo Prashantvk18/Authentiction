@@ -13,11 +13,12 @@ class ProfileController extends Controller
     //
     public function profile_view(){
         $user = Auth::user(); // Get the currently authenticated user
-        return view('Profile.profile_view',['user' => $user]);
+        $user_data = new User();
+        return view('Profile.profile_view',['user' => $user , 'user_data' => $user_data->all()]);
     }
 
     public function profile_save(Request $request){
-        
+
         $rules = [
             'name' => 'required|string|max:255',
         ];
@@ -42,7 +43,8 @@ class ProfileController extends Controller
            if(!$user){
                 return response()->json(['errors' => 'User does not exit' , 'status' => '1'] , 400);
            }
-           $user->is_admin = isset($request->is_admin) ? 1 : 0 ;
+           $user->is_admin = isset($request->is_admin) ? 2 : 0 ;
+           $user->is_active = isset($request->is_active) ? 1 : 0 ;
         }
 
         if($request->password != ''){

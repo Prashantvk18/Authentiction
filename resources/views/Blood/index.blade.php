@@ -200,7 +200,7 @@
                 </form>
             </div>
             
-            
+            @if(Session::get('is_admin') == 1)
             <div class="col-md-1 col-sm-2 filter">
                 <button type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="add_donor()">+ Add Donar</button>
                 
@@ -208,6 +208,7 @@
             <div class="col-md-1 col-sm-2 filter" style="width: 62px;">
             <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal" onclick="add_donor(0,0,0,1)">+ Add Gainer</button>
             </div>
+            @endif
             <!-- <div class="col-md-1 col-sm-2">
                 <a onClick = 'export_pdf();' class="btn btn-success">Export to PDF</a>
             </div> -->

@@ -31,9 +31,19 @@
             <form id="change_pwd">
                 @csrf
                 @if(Session::get('is_admin') == 1)
-                <label for="uname">Unique Name</label>
-                <input type="text" name="uname" class="form-control" value="">
-                <span id="error_user" style="color:red"></span>
+                <div class="form-group">
+                    <label for="uname">User List</label>
+                    <select id="user_list" name="option" class="form-control" onchange ="add_user()">
+                        @foreach($user_data as $data)
+                        <option id="{{$data->uname}}" style="color: @if($data->is_admin == 1 && $data->is_active == 1) Green @elseif($data->is_admin == 0 && $data->is_active == 1) Blue @else Red @endif">{{$data->uname}} </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="uname">Unique Name</label>
+                    <input type="text" id="u_name" name="uname" class="form-control" value="">
+                    <span id="error_user" style="color:red"></span>
+                </div>
                 @endif
                 <div class="form-group">
                     <label for="old_password">Old Password</label>
@@ -49,7 +59,11 @@
                 <div class="form-group"> 
                     <label for="is_admin">Admin</labeL>    
                     <input type="checkbox" name="is_admin">
+
+                    <label for="is_active">Active</labeL>    
+                    <input type="checkbox" name="is_active">
                 </div>
+                
                 @endif
                 <button type="submit" class="btn btn-primary" onclick="change_pwd();">Change Password</button>
             </form>
@@ -58,6 +72,10 @@
 
 </div>
 <script>
+    function add_user(){
+        const selectedOption = $("#user_list").val();
+        $("#u_name").val(selectedOption);
+    }
      function profile_save(){
         console.log('tes');
          var data = $("#profile_save").serialize();

@@ -19,8 +19,8 @@ $gender = ['M' => 'Male' , 'F' => 'Female' , 'O' => 'Other'];
         <label for="mobile_no">Mobile No:</label>
         <input id="mobile_no" type="text" name="mobile_no" class="form-control"
         value="@if($edit > 0) {{$blood_data->mobile_no}} @endif">
-        <span class="text-danger error" id="error_mobile_no"></span><br>
-        @if($gainer == 0 )
+        <span class=" error" id="error_mobile_no"></span><br>
+        @if($gainer == 0 and $edit == 0)
             <button  class="btn" onclick="auto_filled()"><i>Search</i></button>
         @endif
     </div>
@@ -145,7 +145,7 @@ $gender = ['M' => 'Male' , 'F' => 'Female' , 'O' => 'Other'];
      });
     function auto_filled(){
         var mobile_no = $('#mobile_no').val();
-        console.log(mobile_no);
+        //console.log(mobile_no);
         event.preventDefault();
         $.ajax({
             header : {
@@ -167,13 +167,16 @@ $gender = ['M' => 'Male' , 'F' => 'Female' , 'O' => 'Other'];
                     $("#blood_grp").val(response.data.blood_grp);
                     $("#occupation").val(response.data.occupation);
                     $("#error_mobile_no").css('display' , '').html('Record found');
+                    $("#error_mobile_no").css('color' , 'green')
                 }else{
                     $("#error_mobile_no").css('display' , '').html('No record found');
+                    $("#error_mobile_no").css('color' , 'red')
                 }
                 
             },
             error : function(response){
                 $("#error_mobile_no").css('display' , '').html(response.responseJSON.errors);
+                $("#error_mobile_no").css('color' , 'red')
             }
         });
 

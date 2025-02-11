@@ -51,10 +51,19 @@ class AuthenticationController extends Controller
         
         if(\Auth::attempt($request->only('uname','password'))){
             $user = \Auth::user();
-            Session::put('user_name' , $user->name);
-            Session::put('is_admin' , $user->is_admin);
             
-            return redirect('/home');        
+            if($user->is_active == 1){
+                Session::put('user_name' , $user->name);
+                Session::put('is_admin' , $user->is_admin);
+                return redirect('/home');  
+            } 
+            else {
+                // User is not active
+                \Auth::logout();  // Optionally log out the user
+                return redirect('/')->withError('Inactive User');
+            }
+            
+            
         }
         return redirect('/')->withError('Invalid Credential');
     }
@@ -91,14 +100,9 @@ class AuthenticationController extends Controller
         // if(\Auth::attempt($request->only('mobile_no','password'))){
         //     return view('welcome');
         // }
-        return redirect('register')->withError('Error');
+       // return redirect('register')->withError('Error');
     }
     public function logout() {
-        // $user = new User();
-       
-        // $user = User::where('mobile_no' ,  Session::get('mobile_no'))->first();
-        // $user->last_loggedin = null;
-        // $user->save();
         \Auth::logout();
         session()->flush();
         return redirect('/'); 
