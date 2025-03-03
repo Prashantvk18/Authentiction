@@ -66,6 +66,9 @@
                         @if(Session::get('is_admin') == 1 or Session::get('is_admin') == 2 )
                         <li><a class="dropdown-item" href="/blood">Blood</a></li>
                         @endif
+                        @if(Session::get('is_admin') == 1 or Session::get('is_admin') == 3 )
+                        <li><a class="dropdown-item" href="/ticket_tracker">TicketTracker</a></li>
+                        @endif
                         <li><a class="dropdown-item" href="/expanse">Expanse</a></li>
                         <li><a class="dropdown-item" href="/trip_roadmap">Road Map</a></li>
                     </ul>

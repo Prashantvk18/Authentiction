@@ -66,8 +66,8 @@
     {{$vapt_data->links()}}
     <!-----CRICKET------->
     <?php
-    $bowlers = ['bhuvi','shami' , 'boom' , 'yuzi' , 'jadu'];
-    $batters = ['rohit','jais','virat','surya' , 'Hardik','paddy','bjadu' , 'bbhuvi','bshami' , 'bboom' , 'byuzi' ];
+    $bowlers = ['bhuvi','boom' , 'Hardik' , 'yuzi' , 'jadu'];
+    $batters = ['jaiswal','rohit','gill','shrey' , 'surya','pant','bHardik','bjadu' , 'bbhuvi','bboom'   , 'byuzi' ];
     ?>
     <div class="row">
         <div class="col-md-4">
@@ -119,8 +119,8 @@
     </div>
     
 <script>
-    const bowlers = ['bhuvi','shami' , 'yuzi' , 'jadu' , 'boom'];
-    const batters = ['rohit','jais','virat','surya' , 'Hardik','paddy','bjadu' , 'bbhuvi','bshami' , 'bboom' , 'byuzi' ];
+    const bowlers = ['bhuvi','boom' , 'yuzi' , 'jadu' , 'Hardik'];
+    const batters =  ['jaiswal','rohit','gill','shrey' , 'surya','pant','bHardik','bjadu' , 'bbhuvi','bboom'   , 'byuzi' ];
     var ball =over=scores=wicket=0;
     var fscore = sscore = tscore = foscore = fiscore = siscore = sescore = eiscore = niscore = tescore =0;
     var fwkt = swkt = twkt = fowkt = fiwkt = siwkt = sewkt = eiwkt = niwkt = tewkt = 0;
@@ -321,8 +321,8 @@
             }
             $("#second1").html(sscore1);
             $("#wsecond1").html(swkt1);
-            $("#shami").html(sscore1 );
-            $("#wshami").html(swkt1);
+            $("#boom").html(sscore1 );
+            $("#wboom").html(swkt1);
         }
         if(ball1 <=18 && ball1 > 12){
             if(randomNumber1 != 5 && randomNumber1 != 0){
@@ -384,8 +384,8 @@
             }
             $("#seven1").html(sescore1);
             $("#wseven1").html(sewkt1);
-            $("#shami").html(sscore1 + sescore1);
-            $("#wshami").html(swkt1+sewkt1);
+            $("#boom").html(sscore1 + sescore1);
+            $("#wboom").html(swkt1+sewkt1);
         }
         if(ball1 <=48 && ball1 > 42){
             if(randomNumber1 != 5 && randomNumber1 != 0){
@@ -396,8 +396,8 @@
             }
             $("#eight1").html(eiscore1);
             $("#weight1").html(eiwkt1);
-            $("#boom").html(eiscore1 );
-            $("#wboom").html(eiwkt1);
+            $("#Hardik").html(eiscore1 );
+            $("#wHardik").html(eiwkt1);
         }
         if(ball1 <=54 && ball1 > 48){
             if(randomNumber1 != 5 && randomNumber1 != 0){
@@ -420,8 +420,8 @@
             }
             $("#ten1").html(tescore1);
             $("#wten1").html(tewkt1);
-            $("#boom").html(eiscore1 + tescore1);
-            $("#wboom").html(eiwkt1+tewkt1);
+            $("#Hardik").html(eiscore1 + tescore1);
+            $("#wHardik").html(eiwkt1+tewkt1);
         }
         
     }
