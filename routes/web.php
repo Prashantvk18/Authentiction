@@ -3,8 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Middleware\Checkedloggedin;
+use Illuminate\Support\Facades\Storage;
 
 //For sign in and signup page
+
+Route::get('/viewdocument', function () {
+ return view('Expanse.ViewDocument');
+});
+
 Route::group(['middleware' => 'guest'],function() {
     Route::controller(AuthenticationController::class)->group(function(){
         require __DIR__ . '/web_routes/auth_routes.php'; 
