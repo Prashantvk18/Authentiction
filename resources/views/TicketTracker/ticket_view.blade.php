@@ -242,3 +242,73 @@
     }
 </script>
 @include('User.footer')
+
+
+<?php
+$string = 'PAYPALISHIRING';
+$row = 3;
+$str_arr = str_split($string);
+print_r($str_arr);
+echo("<br>");
+$no = 1;
+for($i=1;$i<=$row;$i++){
+$add = $i-1;
+$add_by = ($row -$i) * 2;
+if($add_by == 0){
+$add_by = $row+1;
+};
+	foreach($str_arr as $data){
+   	if($no == $i){
+		echo ($str_arr[$i-1]);
+     }else{
+        $add = $add+$add_by;
+        echo ($str_arr[$add]);
+      }
+        $space = $row - $i;
+       
+        if($space == 0){
+        $space = $row-1;
+        }
+        for($j=1;$j<$space;$j++){
+        echo "&nbsp;&nbsp;";
+        }
+        $no =  $i+1;
+}
+
+echo("<br>");
+
+}
+?> 
+
+</body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<?php
+$string = 'PAYPALISHIRING';
+$row = 3;
+$str_arr = str_split($string);
+print_r($str_arr);
+echo("<br>");
+$no = 1;
+foreach($str_arr as $key => $val){
+for($i=0;$i<$row;$i++){
+	if($i == $key){
+    	echo($val);
+        echo("<br>");
+    }
+    if($key > $i){
+    
+    }
+}
+}
+?> 
+
+</body>
+</html>
+

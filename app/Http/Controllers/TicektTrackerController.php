@@ -36,6 +36,7 @@ class TicektTrackerController extends Controller
     public function ticket_save(Request $request){
         $user = \Auth::user();
         $ticket_data = new TicektTracker();
+        $ticket_data->create_by = $user->id;
         $ticket_data->subject = $request->subject;
         $ticket_data->description = $request->description;
         $ticket_data->assign_to = $request->assignto ;

@@ -52,11 +52,14 @@
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/ticketview">Add Ticket</a>
+                    <a class="nav-link active" aria-current="page" href="/expanse">Expanse</a>
                 </li>
+               <!--- <li class="nav-item">
+                    <a class="nav-link" href="/ticketview">Add Ticket</a>
+                </li>--->
 
                 <!-- Dropdown Menu -->
-                <li class="nav-item dropdown">
+               <!--- <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Module
                     </a>
@@ -72,7 +75,7 @@
                         <li><a class="dropdown-item" href="/expanse">Expanse</a></li>
                         <li><a class="dropdown-item" href="/trip_roadmap">Road Map</a></li>
                     </ul>
-                </li> 
+                </li> --->
 
                 <li class="nav-item">
                     <a class="nav-link" href="/logout">Log Out</a>

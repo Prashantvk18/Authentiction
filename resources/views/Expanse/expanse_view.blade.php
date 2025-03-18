@@ -29,9 +29,7 @@
     </form>
     <form action="{{route('road_map_view' , ['id' => $trip_id ])}}" method="get" class="d-inline-block mr-2">
     @csrf
-        <button type="submit" class="btn btn-danger btn-block btn-sm">
-            <i class="fa fa-map">Add Road Map</i>
-        </button>
+     
     </form>
     <br><br>
     <div class="table-responsive">
