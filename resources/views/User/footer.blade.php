@@ -66,7 +66,7 @@ footer {
                 <p>Contact: <a href="mailto:prashantjainvk18@gmail.com">prashantjainvk18@gmail.com</a></p>
             </div>
         </footer>
-    </div>
+   
 </footer>
 
 </body>

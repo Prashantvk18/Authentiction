@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Middleware\Checkedloggedin;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\DB;
 //For sign in and signup page
 
 Route::get('/viewdocument', function () {
@@ -30,9 +30,38 @@ Route::group(['middleware' => 'checkedloggedin'],function() {
     require __DIR__ . '/web_routes/ticket_tracker.php';
     Route::get('/logout',[AuthenticationController::class,'logout'])->name('logout');
     
+
+
+Route::get('/track', function () {
+    return view('location.track');
 });
 
+Route::post('/update-location', function (\Illuminate\Http\Request $request) {
+    $user = \Auth::user();
+    DB::table('user_locations')->updateOrInsert(
+        ['user_id' => $user->id],
+        [
+            'name' =>$user->name,
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude,
+            'updated_at' => now()
+        ]
+    );
+    return response()->json(['status' => 'updated']);
+});
+
+Route::get('/dashboard', function () {
+    $locations = DB::table('user_locations')->get();
+    return view('location.dashboard', compact('locations'));
+});
+});
 
 Route::get('/welcome' , function(){
-    return view('welcome');
-})->middleware(['checkedloggedin']);
+    return view('welcome2');
+});
+
+// web.php
+
+
+
+//->middleware(['checkedloggedin']);
