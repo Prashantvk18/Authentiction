@@ -32,29 +32,46 @@ Route::group(['middleware' => 'checkedloggedin'],function() {
     
 
 
-Route::get('/track', function () {
-    return view('location.track');
+
+
+    
+
+Route::get('/dashboard', function () {
+    $user = \Auth::user();
+    if($user->is_admin == 1){
+        $locations = DB::table('user_locations')->get();
+        return view('location.dashboard', compact('locations'));
+    }elseif($user->is_admin == 3){
+        $array = ['1','16','17','18','13','12','14','19','20','3'];
+        $locations = DB::table('user_locations')->whereIn('user_id', $array)->get();
+        return view('location.dashboard', compact('locations'));
+    }
+    
+});
+});
+
+
+Route::get('/track/{id}', function ($id) {
+    return view('location.track' , ['id' => $id]);
 });
 
 Route::post('/update-location', function (\Illuminate\Http\Request $request) {
-    $user = \Auth::user();
+ $array = ['1','16','17','18','3','13','7','12','15','14','19','20'];
+ if(in_array( $request->userId , $array)){
     DB::table('user_locations')->updateOrInsert(
-        ['user_id' => $user->id],
+        ['user_id' => $request->userId],
         [
-            'name' =>$user->name,
+            'user_id' => $request->userId,
             'latitude' => $request->latitude,
             'longitude' => $request->longitude,
             'updated_at' => now()
         ]
-    );
+        );
     return response()->json(['status' => 'updated']);
+ };
+    return response()->json(['status' => 'No permission']);
 });
 
-Route::get('/dashboard', function () {
-    $locations = DB::table('user_locations')->get();
-    return view('location.dashboard', compact('locations'));
-});
-});
 
 Route::get('/welcome' , function(){
     return view('welcome2');

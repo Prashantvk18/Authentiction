@@ -68,13 +68,25 @@
                         <li><a class="dropdown-item" href="/csv_view">Create CSV</a></li>
                         <li><a class="dropdown-item" href="/vapt_index">VAPT</a></li>
                         @if(Session::get('is_admin') == 1 or Session::get('is_admin') == 2 )
-                        <li><a class="dropdown-item" href="/blood">Blood</a></li>
+                        <li><a class="dropdown-item" href="/main_page">Blood</a></li>
                         @endif
                         @if(Session::get('is_admin') == 1 or Session::get('is_admin') == 3 )
                         <li><a class="dropdown-item" href="/ticket_tracker">TicketTracker</a></li>
                         @endif
                         <li><a class="dropdown-item" href="/expanse">Expanse</a></li>
                         <li><a class="dropdown-item" href="/trip_roadmap">Road Map</a></li>
+                    </ul>
+                </li> 
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Location
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink1">
+                    @if(Session::get('is_admin') == 1 or Session::get('is_admin') == 3 )
+                        <li><a class="dropdown-item" href="/track">Track</a></li>
+                        <li><a class="dropdown-item" href="/dashboard">Dashboard</a></li>
+                        @endif
+                      
                     </ul>
                 </li> 
 
@@ -85,12 +97,39 @@
         </div>
     </div>
 </nav>
+<button id="backBtn" onclick="history.back()">← Back</button>
 
 <!-- Additional Styles -->
 <style>
     /* Navbar improvements */
 
    
+#backBtn {
+  display: none; /* Hidden by default */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 16px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  cursor: pointer;
+  
+}
+#backBtn:hover {
+  background-color: #0056b3;
+}
+
+/* Show on mobile devices (max width 768px) */
+@media (max-width: 768px) {
+  #backBtn {
+    display: block;
+  }
+}
     .navbar {
         background-color: #63a4ba !important;
         padding: 10px 0;

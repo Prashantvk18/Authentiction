@@ -195,6 +195,7 @@ class ExpanseController extends Controller
         $expanse_data->date = is_null($request->start_date) ? date('Y-m-d') : $request->start_date ;
         //$expanse_data->added_by = $user->id;
         $expanse_data->save();
+        
        /* $user_data = UserData::where('trip_id' , $request->trip_id)->whereNotIn('id',$checkbox_array )->get();
         $per_user_contro = $request->price / count($user_data);
        // print_r($per_user_contro);die();

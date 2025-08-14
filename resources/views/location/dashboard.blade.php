@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Friend Locations</title>
-    <!-- FontAwesome for copy icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+@include('User.header')
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -86,11 +81,10 @@
             }
         }
     </style>
-</head>
-<body>
 
+<button onclick="window.history.back();" class="btn btn-outline-primary">← Go Back</button>
 <h2>Friends' Latest Locations</h2>
-<a href="https://gps-coordinates.org/coordinate-converter.php" target="_blank">At this link you can get latest location </a>
+<a href="https://gps-coordinates.org/coordinate-converter.php" target="_blank">At this link you can get exact location </a>
 <table>
     <thead>
         <tr>
@@ -115,11 +109,34 @@
             <td data-label="Last Updated">
                 {{ \Carbon\Carbon::parse($loc->updated_at)->diffForHumans() }}
             </td>
+
+            <td data-label="Address" id="address_{{ $loc->user_id }}">
+            <!-- Address will appear here -->
+            <button onclick="reverseGeocode({{ $loc->latitude }}, {{ $loc->longitude }}, {{ $loc->user_id }})">Show Address</button>
+        </td>
         </tr>
         @endforeach
     </tbody>
 </table>
 <script>
+
+function reverseGeocode(lat, lon, userId) {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            console.log('Address:', data.display_name);
+            // Update the address cell for this user
+            document.getElementById('address_' + userId).innerText = data.display_name;
+        })
+        .catch(error => {
+            console.error('Reverse geocoding error:', error);
+            document.getElementById('address_' + userId).innerText = "Error fetching address";
+        });
+}
+
+
 function copyText(typeAndId) {
     let id = "text-to-copy_" + typeAndId;
     let textElement = document.getElementById(id);
@@ -135,5 +152,4 @@ function copyText(typeAndId) {
     });
 }
 </script>
-</body>
-</html>
+@include('User.footer')

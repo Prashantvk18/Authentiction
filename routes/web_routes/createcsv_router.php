@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Route;
         Route::get("/csv_view" , 'csv_view')->name('csv_view');
         Route::get("/csv_setting" , 'csv_setting')->name('csv_setting');
         Route::post("/create_csv" , 'create_csv')->name('create_csv');
+        Route::post('/generate-cfm', 'generate')->name('generate');
+
        
     });
     

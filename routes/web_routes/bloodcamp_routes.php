@@ -3,7 +3,9 @@ use App\Http\Controllers\BloodCampController;
 use Illuminate\Support\Facades\Route;
 
     Route::controller(BloodCampController::class)->group(function(){
+        Route::get('main_page' , 'main_page')->name('main_page');
         Route::get('blood' , 'blood')->name('blood');
+        Route::get('/event_model' , 'event_model')->name('event_model');
         Route::get('blood_modal' , 'blood_modal')->name('blood_modal');
         Route::get('get_user_data' , 'get_user_data')->name('get_user_data');
         Route::post('save_blood' , 'save_blood')->name('save_blood');

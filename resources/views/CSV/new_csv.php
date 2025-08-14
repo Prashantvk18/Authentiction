@@ -1,7 +1,7 @@
 <?php
 // Hardcoded tables and columns
 $tables = [
-    'NINST_TRADE_VIEW' => ["''","COMPANY_CODE", "CLIENT_ID", "clid", "TRADE_DATE", "MKT_TYPE", "SETTLEMENT_NO", "SCRIP_SYMBOL", "SCRIP_NAME", "BUY_SALE", "CONTRACT_NO",
+    'NINST_TRADE_VIEW' => ["COMPANY_CODE", "CLIENT_ID", "clid", "TRADE_DATE", "MKT_TYPE", "SETTLEMENT_NO", "SCRIP_SYMBOL", "SCRIP_NAME", "BUY_SALE", "CONTRACT_NO",
     "TRADE_TYPE", "BILL_NO", "QUANTITY", "TurnOver", "MKT_PRICE", "MKT_Amount", "NET_PRICE", "BRK_RATE", "TOT_BRK", "USER_ID", "ORDER_NUMBER",
     "TRADE_DATETIME", "CUSTODIAN_CODE", "IS_MANUAL_BROKERAGE", "STP", "Confrom", "CNT", "INSTTRADES", "trade_col2", "USER_NOTES", "ROW_ID", "InstAutho",
     "ISIN", "TradeRndAmt", "STT_RND", "STT", "STTInclusiveamt", "TOC", "STAMP_DUTY", "CESS", "CGST", "SGST", "IGST", "UTT", "GST", "SEBI", "OTH", "OTH2",
@@ -26,7 +26,6 @@ $tables = [
     <style>
         .column-btn {
             margin: 4px;
-            cursor: pointer;
         }
         .selected {
             background-color: #0d6efd !important;
@@ -79,7 +78,7 @@ $tables = [
     <div class="card-header bg-warning text-dark">CFM File Details</div>
     <div class="card-body">
         <div class="mb-3">
-            <label class="form-label">CFM/Excel File Name (with ColdFusion vars): copy_this #Dir#\Cash_EOD_#replace(File_Date,'/','','all')#.xls </label>
+            <label class="form-label">CFM/Excel File Name (with ColdFusion vars): copy_this </label>
             <input type="text" id="fileNameInput" class="form-control" placeholder="e.g., #Dir#\Cash_EOD_#replace(File_Date,'/','','all')#.xls">
         </div>
         <div class="mb-3">
@@ -109,18 +108,17 @@ $tables = [
     const sqlTextarea = document.getElementById('sqlTextarea');
 
     let selectedTables = new Set();
-    // Now an ordered list of {table, column} objects
-    let selectedColumns = [];
+    let selectedColumns = new Map(); // table => Set(columns)
 
     document.querySelectorAll('.table-checkbox').forEach(chk => {
         chk.addEventListener('change', function () {
             const table = this.value;
             if (this.checked) {
                 selectedTables.add(table);
+                selectedColumns.set(table, new Set());
             } else {
                 selectedTables.delete(table);
-                // Remove all selected columns from this table if table is deselected
-                selectedColumns = selectedColumns.filter(sc => sc.table !== table);
+                selectedColumns.delete(table);
             }
             renderColumns();
             updateSQL();
@@ -128,124 +126,120 @@ $tables = [
     });
 
     function renderColumns() {
-        columnsContainer.innerHTML = '';
-        selectedTables.forEach(table => {
-            const cols = tables[table];
+    columnsContainer.innerHTML = '';
+    selectedTables.forEach(table => {
+        const cols = tables[table];
 
-            // Card structure
-            const card = document.createElement('div');
-            card.className = 'card mb-3';
-            card.innerHTML = `
-                <div class="card-header">${table} Columns</div>
-                <div class="card-body">
-                    <input type="text" class="form-control mb-3" placeholder="🔍 Search columns..." oninput="filterColumns(this, '${table}')">
-                    <div class="scroll-x" id="column-buttons-${table}"></div>
-                </div>`;
-            
-            const scrollArea = card.querySelector(`#column-buttons-${table}`);
+        // Card structure
+        const card = document.createElement('div');
+        card.className = 'card mb-3';
+        card.innerHTML = `
+            <div class="card-header">${table} Columns</div>
+            <div class="card-body">
+                <input type="text" class="form-control mb-3" placeholder="🔍 Search columns..." oninput="filterColumns(this, '${table}')">
+                <div class="scroll-x" id="column-buttons-${table}"></div>
+            </div>`;
+        
+        const scrollArea = card.querySelector(`#column-buttons-${table}`);
 
-            cols.forEach(col => {
-                const btn = document.createElement('button');
-                btn.className = 'btn btn-outline-secondary btn-sm column-btn';
-                btn.textContent = col;
-                // Check if this column is selected (exists in selectedColumns)
-                const isSelected = selectedColumns.some(sc => sc.table === table && sc.column === col);
-                if (isSelected) {
-                    btn.classList.add('selected');
-                }
+        cols.forEach(col => {
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-outline-secondary btn-sm column-btn';
+            btn.textContent = col;
+            if (selectedColumns.get(table).has(col)) {
+                btn.classList.add('selected');
+            }
 
-                btn.onclick = () => {
-                    toggleColumn(table, col);
-                    btn.classList.toggle('selected');
-                };
+            btn.onclick = () => {
+                toggleColumn(table, col);
+                btn.classList.toggle('selected');
+            };
 
-                scrollArea.appendChild(btn);
-            });
-
-            columnsContainer.appendChild(card);
+            scrollArea.appendChild(btn);
         });
-    }
 
-    function filterColumns(input, table) {
-        const filter = input.value.toLowerCase();
-        const container = document.getElementById(`column-buttons-${table}`);
-        const buttons = container.querySelectorAll('button');
+        columnsContainer.appendChild(card);
+    });
+}
 
-        buttons.forEach(btn => {
-            const text = btn.textContent.toLowerCase();
-            btn.style.display = text.includes(filter) ? 'inline-block' : 'none';
-        });
-    }
+function filterColumns(input, table) {
+    const filter = input.value.toLowerCase();
+    const container = document.getElementById(`column-buttons-${table}`);
+    const buttons = container.querySelectorAll('button');
+
+    buttons.forEach(btn => {
+        const text = btn.textContent.toLowerCase();
+        btn.style.display = text.includes(filter) ? 'inline-block' : 'none';
+    });
+}
 
     function toggleColumn(table, column) {
-        // Check if already selected
-        const index = selectedColumns.findIndex(sc => sc.table === table && sc.column === column);
-        if (index >= 0) {
-            // Remove if found
-            selectedColumns.splice(index, 1);
+        const colsSet = selectedColumns.get(table);
+        if (colsSet.has(column)) {
+            colsSet.delete(column);
         } else {
-            // Add to end
-            selectedColumns.push({table, column});
+            colsSet.add(column);
         }
         updateSQL();
     }
 
     function updateSQL() {
-        if (selectedTables.size === 0) {
-            sqlTextarea.value = '';
-            return;
+    if (selectedTables.size === 0) {
+        sqlTextarea.value = '';
+        return;
+    }
+
+    // Build SELECT
+    let selectParts = [];
+    selectedColumns.forEach((colsSet, table) => {
+        const alias = getAlias(table);
+        colsSet.forEach(col => {
+            selectParts.push(`${alias}.${col}`);
+        });
+    });
+
+    let selectClause = selectParts.length > 0
+        ? 'SELECT ' + selectParts.join(', ') + '\n'
+        : 'SELECT *\n';
+
+    // FROM + JOIN
+    let fromClause = '';
+    const tArr = Array.from(selectedTables);
+    const hasTrade = tArr.includes('NINST_TRADE_VIEW');
+    const hasMaster = tArr.includes('NINST_MASTER');
+    const hasClient = tArr.includes('CLIENT_MASTER');
+
+    if (hasTrade) {
+        fromClause = 'FROM NINST_TRADE_VIEW A\n';
+        if (hasMaster) {
+            fromClause += 'JOIN NINST_MASTER B ON A.company_code = B.company_code AND A.ITEMPCODE = B.ITEMPCODE\n';
         }
-
-        // Build SELECT preserving order of selection
-        let selectParts = [];
-        if (selectedColumns.length > 0) {
-            selectedColumns.forEach(({table, column}) => {
-                const alias = getAlias(table);
-                selectParts.push(`${alias}.${column}`);
-            });
-        } else {
-            selectParts.push('*');
+        if (hasClient) {
+            fromClause += 'JOIN CLIENT_MASTER C ON A.CLIENT_ID = C.CLIENT_ID AND A.company_code = c.company_code\n';
         }
+    } else if (hasMaster) {
+        fromClause = 'FROM NINST_MASTER B\n';
+    } else if (hasClient) {
+        fromClause = 'FROM CLIENT_MASTER C\n';
+    }
 
-        const selectClause = 'SELECT ' + selectParts.join(', ') + '\n';
-
-        // FROM + JOIN (same logic as before)
-        let fromClause = '';
-        const tArr = Array.from(selectedTables);
-        const hasTrade = tArr.includes('NINST_TRADE_VIEW');
-        const hasMaster = tArr.includes('NINST_MASTER');
-        const hasClient = tArr.includes('CLIENT_MASTER');
-
-        if (hasTrade) {
-            fromClause = 'FROM NINST_TRADE_VIEW A\n';
-            if (hasMaster) {
-                fromClause += 'JOIN NINST_MASTER B ON A.company_code = B.company_code AND A.ITEMPCODE = B.ITEMPCODE\n';
-            }
-            if (hasClient) {
-                fromClause += 'JOIN CLIENT_MASTER C ON A.CLIENT_ID = C.CLIENT_ID AND A.company_code = C.company_code\n';
-            }
-        } else if (hasMaster) {
-            fromClause = 'FROM NINST_MASTER B\n';
-        } else if (hasClient) {
-            fromClause = 'FROM CLIENT_MASTER C\n';
-        }
-
-        // Default WHERE + ORDER BY
-        const whereClause = `WHERE A.TRADE_DATE = convert(datetime,'#File_Date#',103)
-AND A.row_id IN (#Row_id#)
-AND A.COMPANY_CODE = '#COMPANY_CODE#'
-AND A.TRADE_DATE = '#TRADE_DATE#'
-AND A.CLIENT_ID IN (
-    SELECT DISTINCT CLIENT_ID
-    FROM NInst_Trade
-    WHERE TRADE_DATE = convert(datetime,'#File_Date#',103)
-    AND row_id IN (#Row_id#)
-)
+    // Default WHERE + ORDER BY
+    const whereClause = `WHERE A.TRADE_DATE = convert(datetime,'#File_Date#',103)
+    AND A.row_id IN (#Row_id#)
+    AND A.COMPANY_CODE = '#COMPANY_CODE#'
+    AND A.TRADE_DATE = '#TRADE_DATE#'
+    AND A.CLIENT_ID IN (
+        SELECT DISTINCT CLIENT_ID
+        FROM NInst_Trade
+        WHERE TRADE_DATE = convert(datetime,'#File_Date#',103)
+        AND row_id IN (#Row_id#)
+    )
 ORDER BY ORGSCRIP_NAME`;
 
-        // Final SQL
-        sqlTextarea.value = `${selectClause}${fromClause}${whereClause}`;
-    }
+    // Final SQL
+    sqlTextarea.value = `${selectClause}${fromClause}${whereClause}`;
+}
+
 
     function getAlias(table) {
         if (table === 'NINST_TRADE_VIEW') return 'A';
@@ -255,37 +249,37 @@ ORDER BY ORGSCRIP_NAME`;
     }
 
     document.getElementById('generateBtn').addEventListener('click', function () {
-        const fileName = document.getElementById('fileNameInput').value.trim();
-        const headers = document.getElementById('headerRowInput').value.trim();
-        const sql = document.getElementById('sqlTextarea').value.trim();
+    const fileName = document.getElementById('fileNameInput').value.trim();
+    const headers = document.getElementById('headerRowInput').value.trim();
+    const sql = document.getElementById('sqlTextarea').value.trim();
 
-        if (!fileName || !headers || !sql) {
-            alert("Please fill in the file name, headers, and ensure SQL is generated.");
-            return;
-        }
+    if (!fileName || !headers || !sql) {
+        alert("Please fill in the file name, headers, and ensure SQL is generated.");
+        return;
+    }
 
-        fetch('/generate-cfm', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: JSON.stringify({ file_name: fileName, headers: headers, sql: sql })
-        })
-        .then(response => response.blob())
-        .then(blob => {
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = "generated_query.cfm";
-            a.click();
-            window.URL.revokeObjectURL(url);
-        })
-        .catch(error => {
-            console.error('CFM Generation Failed:', error);
-            alert("Something went wrong generating the file.");
-        });
+    fetch('/generate-cfm', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+        },
+        body: JSON.stringify({ file_name: fileName, headers: headers, sql: sql })
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "generated_query.cfm";
+        a.click();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        console.error('CFM Generation Failed:', error);
+        alert("Something went wrong generating the file.");
     });
+});
 
 </script>
 

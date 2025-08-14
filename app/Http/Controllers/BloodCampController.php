@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Session; // Import the Session facade
 class BloodCampController extends Controller
 {
     //
+    public function main_page(){
+        return view('Blood.main_page');
+    }
+
+    public function event_model(){
+        return response()->json(
+            ['data' => view('Blood.add_model')->render()]);
+        }
+    
     public function blood(Request $request){
        
         

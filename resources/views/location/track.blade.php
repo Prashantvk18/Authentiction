@@ -5,12 +5,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
-    <h2>Your Location is Being Updated Every 20 Minutes</h2>
-
+    <input type="hidden" id="user_id" value = "{{$id}}">
+    <h2>Your Location is Being Updated. Developed by Pranay Jain</h2>
+    <div id="location-status" style="margin-top: 20px; font-weight: bold;"></div>
     <script>
       
 
-        function sendLocation(lat, lng) {
+        function sendLocation(lat, lng , userId) {
             fetch('/update-location', {
                 method: 'POST',
                 headers: {
@@ -20,17 +21,28 @@
                 body: JSON.stringify({
                     latitude: lat,
                     longitude: lng,
+                    userId: userId
                    
                 })
             }).then(response => response.json())
-              .then(data => console.log("Location sent:", data));
+            .then(data => {
+        console.log("Location sent:", data);
+        // Display the status message on the page
+        document.getElementById('location-status').innerText = "Status: " + (data.status || "Unknown response");
+    })
+    .catch(error => {
+        console.error("Error sending location:", error);
+        document.getElementById('location-status').innerText = "Error sending location";
+    });
         }
 
         function getAndSendLocation() {
+           var userId = document.getElementById("user_id").value;
+         
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
-                        sendLocation(position.coords.latitude, position.coords.longitude);
+                        sendLocation(position.coords.latitude, position.coords.longitude , userId);
                     },
                     (error) => {
                         console.error("Error getting location", error);
@@ -39,7 +51,7 @@
             } else {
                 alert("Geolocation is not supported.");
             }
-            setTimeout(getAndSendLocation, 30000);
+//setTimeout(getAndSendLocation, 30000);
         }
 
         // Send immediately on page load

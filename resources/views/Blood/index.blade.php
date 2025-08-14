@@ -137,7 +137,7 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="/csv_view">Create CSV</a></li>
                         <li><a class="dropdown-item" href="/vapt_index">VAPT</a></li>
-                        <li><a class="dropdown-item" href="/blood">Blood</a></li>
+                        <li><a class="dropdown-item" href="/main_page">Blood</a></li>
                         <li><a class="dropdown-item" href="/expanse">Expanse</a></li>
                         <li><a class="dropdown-item" href="/trip_roadmap">Road Map</a></li>
                     </ul>

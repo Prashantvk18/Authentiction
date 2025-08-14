@@ -32,9 +32,14 @@
                         <div class="g-recaptcha" data-sitekey="your-site-key-here"></div>
                     </div> 
                     -->
-
                     <div class="form-group mt-4">
-                        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+                        <input type="checkbox" id="privacyPolicy" name="privacyPolicy" onchange="toggleSubmitButton()">
+                        <label for="privacyPolicy">
+                        I agree to the <a href="/privacy-policy.html" target="_blank">Privacy Policy</a>
+                        </label><br><br>
+                    </div>
+                    <div class="form-group mt-4">
+                        <button id="submitBtn" type="submit" class="btn btn-primary btn-block" disabled>Log In</button>
                     </div>
                 </form>
 
@@ -92,6 +97,15 @@
 </style>
 
 </div>
+
+<script>
+    function toggleSubmitButton() {
+      var checkbox = document.getElementById("privacyPolicy");
+      var submitBtn = document.getElementById("submitBtn");
+
+      submitBtn.disabled = !checkbox.checked;
+    }
+  </script>
 @include('Authentication.footer')
 <!---6Lfno6gpAAAAAJE5hI6UPLo-5GcR0Q6vYnyG54Zn secret key
 
